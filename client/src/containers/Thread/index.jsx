@@ -10,7 +10,7 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, likePost, toggleExpandedPost, addPost } from './actions';
+import { loadPosts, loadMorePosts, toggleExpandedPost, addPost, dislikePost, reactPost } from './actions';
 
 import styles from './styles.module.scss';
 
@@ -28,12 +28,12 @@ const Thread = ({
   expandedPost,
   hasMorePosts,
   addPost: createPost,
-  likePost: like,
+  reactPost: react,
+  dislikePost: dislike,
   toggleExpandedPost: toggle
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
-
   const toggleShowOwnPosts = () => {
     setShowOwnPosts(!showOwnPosts);
     postsFilter.userId = showOwnPosts ? undefined : userId;
@@ -76,7 +76,8 @@ const Thread = ({
         {posts.map(post => (
           <Post
             post={post}
-            likePost={like}
+            reactPost={react}
+            dislikePost={dislike}
             toggleExpandedPost={toggle}
             sharePost={sharePost}
             key={post.id}
@@ -96,7 +97,8 @@ Thread.propTypes = {
   userId: PropTypes.string,
   loadPosts: PropTypes.func.isRequired,
   loadMorePosts: PropTypes.func.isRequired,
-  likePost: PropTypes.func.isRequired,
+  reactPost: PropTypes.func.isRequired,
+  dislikePost: PropTypes.func.isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired
 };
@@ -118,7 +120,8 @@ const mapStateToProps = rootState => ({
 const actions = {
   loadPosts,
   loadMorePosts,
-  likePost,
+  reactPost,
+  dislikePost,
   toggleExpandedPost,
   addPost
 };

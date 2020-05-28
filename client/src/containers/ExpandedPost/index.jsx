@@ -4,7 +4,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Comment as CommentUI, Header } from 'semantic-ui-react';
 import moment from 'moment';
-import { likePost, toggleExpandedPost, addComment } from 'src/containers/Thread/actions';
+import { reactPost, dislikePost, toggleExpandedPost, addComment } from 'src/containers/Thread/actions';
 import Post from 'src/components/Post';
 import Comment from 'src/components/Comment';
 import AddComment from 'src/components/AddComment';
@@ -13,7 +13,8 @@ import Spinner from 'src/components/Spinner';
 const ExpandedPost = ({
   post,
   sharePost,
-  likePost: like,
+  reactPost: react,
+  dislikePost: dislike,
   toggleExpandedPost: toggle,
   addComment: add
 }) => (
@@ -23,7 +24,8 @@ const ExpandedPost = ({
         <Modal.Content>
           <Post
             post={post}
-            likePost={like}
+            reactPost={react}
+            dislikePost={dislike}
             toggleExpandedPost={toggle}
             sharePost={sharePost}
           />
@@ -45,7 +47,8 @@ const ExpandedPost = ({
 ExpandedPost.propTypes = {
   post: PropTypes.objectOf(PropTypes.any).isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
-  likePost: PropTypes.func.isRequired,
+  reactPost: PropTypes.func.isRequired,
+  dislikePost: PropTypes.func.isRequired,
   addComment: PropTypes.func.isRequired,
   sharePost: PropTypes.func.isRequired
 };
@@ -54,7 +57,7 @@ const mapStateToProps = rootState => ({
   post: rootState.posts.expandedPost
 });
 
-const actions = { likePost, toggleExpandedPost, addComment };
+const actions = { reactPost, dislikePost, toggleExpandedPost, addComment };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 
