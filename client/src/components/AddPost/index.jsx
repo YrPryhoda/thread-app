@@ -6,9 +6,11 @@ import styles from './styles.module.scss';
 
 const AddPost = ({
   addPost,
-  uploadImage
+  updatePost,
+  uploadImage,
+  post
 }) => {
-  const [body, setBody] = useState('');
+  const [body, setBody] = useState(post ? post.body : '');
   const [image, setImage] = useState(undefined);
   const [isUploading, setIsUploading] = useState(false);
 
@@ -16,7 +18,11 @@ const AddPost = ({
     if (!body) {
       return;
     }
-    await addPost({ imageId: image?.imageId, body });
+    if (post && post.id) {
+      await updatePost({ id: post.id, imageId: image?.imageId, body });
+    } else {
+      await addPost({ imageId: image?.imageId, body });
+    }
     setBody('');
     setImage(undefined);
   };
@@ -56,9 +62,15 @@ const AddPost = ({
     </Segment>
   );
 };
+AddPost.defaultProps = {
+  addPost: undefined,
+  updatePost: undefined
+};
 
 AddPost.propTypes = {
-  addPost: PropTypes.func.isRequired,
+  addPost: PropTypes.func,
+  updatePost: PropTypes.func,
+  post: PropTypes.objectOf(PropTypes.any).isRequired,
   uploadImage: PropTypes.func.isRequired
 };
 
