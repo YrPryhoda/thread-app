@@ -3,7 +3,12 @@ export default (orm, DataTypes) => {
     isLike: {
       allowNull: false,
       type: DataTypes.BOOLEAN,
-      defaultValue: true
+      defaultValue: false
+    },
+    isDislike: {
+      allowNull: false,
+      type: DataTypes.BOOLEAN,
+      defaultValue: false
     },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE

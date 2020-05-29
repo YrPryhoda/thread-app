@@ -70,6 +70,11 @@ export default {
           type: Sequelize.BOOLEAN,
           defaultValue: true
         },
+        isDislike: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: false
+        },
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
       }, { transaction }),

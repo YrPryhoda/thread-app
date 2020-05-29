@@ -3,6 +3,7 @@ import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel } fro
 import BaseRepository from './baseRepository';
 
 const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
+const dislikeCase = bool => `CASE WHEN "postReactions"."isDislike" = ${bool} THEN 1 ELSE 0 END`;
 
 class PostRepository extends BaseRepository {
   async getPosts(filter) {
@@ -26,7 +27,7 @@ class PostRepository extends BaseRepository {
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
           [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likeCount'],
-          [sequelize.fn('SUM', sequelize.literal(likeCase(false))), 'dislikeCount']
+          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true))), 'dislikeCount']
         ]
       },
       include: [{
@@ -75,7 +76,7 @@ class PostRepository extends BaseRepository {
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
           [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likeCount'],
-          [sequelize.fn('SUM', sequelize.literal(likeCase(false))), 'dislikeCount']
+          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true))), 'dislikeCount']
         ]
       },
       include: [{

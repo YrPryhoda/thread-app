@@ -10,18 +10,59 @@ export const create = (userId, post) => postRepository.create({
   userId
 });
 
-export const setReaction = async (userId, { postId, isLike = true }) => {
-  // define the callback for future use as a promise
+export const setReaction = async (userId, { postId, isLike }) => {
+  const reaction = await postReactionRepository.getPostReaction(userId, postId);
   const updateOrDelete = react => (react.isLike === isLike
     ? postReactionRepository.deleteById(react.id)
-    : postReactionRepository.updateById(react.id, { isLike }));
+    : postReactionRepository.updateById(react.id, { isLike, isDislike: false }));
+  let result;
+  let justify;
+  let sendBack;
+  if (reaction) {
+    justify = reaction.isDislike;
+    result = await updateOrDelete(reaction);
+    if (Number.isInteger(result)) {
+      sendBack = {
+        isDislike: justify
+      };
+    } else {
+      sendBack = {
+        ...postReactionRepository.getPostReaction(userId, postId),
+        isDislike: justify
+      };
+    }
+  } else {
+    await postReactionRepository.create({ userId, postId, isLike, isDislike: false });
+    sendBack = postReactionRepository.getPostReaction(userId, postId);
+  }
+  return sendBack;
+};
 
+export const setReactionDislike = async (userId, { postId, isDislike }) => {
+  // define the callback for future use as a promise
   const reaction = await postReactionRepository.getPostReaction(userId, postId);
-
-  const result = reaction
-    ? await updateOrDelete(reaction)
-    : await postReactionRepository.create({ userId, postId, isLike });
-
-  // the result is an integer when an entity is deleted
-  return Number.isInteger(result) ? {} : postReactionRepository.getPostReaction(userId, postId);
+  const updateOrDelete = react => (react.isDislike === isDislike
+    ? postReactionRepository.deleteById(react.id)
+    : postReactionRepository.updateById(react.id, { isDislike, isLike: false }));
+  let result;
+  let justify;
+  let sendBack;
+  if (reaction) {
+    justify = reaction.isLike;
+    result = await updateOrDelete(reaction);
+    if (Number.isInteger(result)) {
+      sendBack = {
+        isLike: justify
+      };
+    } else {
+      sendBack = {
+        ...postReactionRepository.getPostReaction(userId, postId),
+        isLike: justify
+      };
+    }
+  } else {
+    await postReactionRepository.create({ userId, postId, isDislike, isLike: false });
+    sendBack = postReactionRepository.getPostReaction(userId, postId);
+  }
+  return sendBack;
 };
