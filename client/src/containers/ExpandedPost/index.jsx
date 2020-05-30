@@ -21,7 +21,8 @@ const ExpandedPost = ({
   uploadImage,
   sendEditedPost,
   editPost,
-  postToEdit
+  postToEdit,
+  deletePost
 }) => {
   const [editedPost, setEditedPost] = useState(post);
   useEffect(() => {
@@ -43,6 +44,7 @@ const ExpandedPost = ({
               sendEditedPost={sendEditedPost}
               editPost={editPost}
               postToEdit={postToEdit}
+              deletePost={deletePost}
             />
             <CommentUI.Group style={{ maxWidth: '100%' }}>
               <Header as="h3" dividing>
@@ -71,6 +73,7 @@ ExpandedPost.propTypes = {
   postToEdit: PropTypes.func,
   uploadImage: PropTypes.func.isRequired,
   sendEditedPost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired
 };
 
@@ -82,7 +85,6 @@ const mapStateToProps = rootState => ({
   post: rootState.posts.expandedPost,
   userId: rootState.profile.user.id,
   postToEdit: rootState.posts.postToEdit
-
 });
 
 const actions = { reactPost, dislikePost, toggleExpandedPost, addComment };

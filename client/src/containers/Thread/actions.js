@@ -68,22 +68,6 @@ export const addPost = post => async dispatch => {
   dispatch(addPostAction(newPost));
 };
 
-export const deletePostById = postId => async (dispatch, getRootState) => {
-  try {
-    const { result } = await postService.deletePost(postId);
-    if (Number(result)) {
-      const { posts: { posts, expandedPost } } = getRootState();
-      const newPosts = posts.filter(el => el.id !== postId);
-      dispatch(deletePostAction(newPosts));
-      if (expandedPost && expandedPost.id === postId) {
-        dispatch(deletePostAction(newPosts));
-      }
-    }
-  } catch (err) {
-    console.log(err.message);
-  }
-};
-
 export const defineEditedPost = id => dispatch => {
   dispatch(editPostAction(id));
 };
@@ -110,6 +94,22 @@ export const sendEditedPost = (post, postId) => async (dispatch, getRootState) =
 export const toggleExpandedPost = postId => async dispatch => {
   const post = postId ? await postService.getPost(postId) : undefined;
   dispatch(setExpandedPostAction(post));
+};
+
+export const deletePostById = postId => async (dispatch, getRootState) => {
+  try {
+    const { result } = await postService.deletePost(postId);
+    if (Number(result)) {
+      const { posts: { posts, expandedPost } } = getRootState();
+      const newPosts = posts.filter(el => el.id !== postId);
+      dispatch(deletePostAction(newPosts));
+      if (expandedPost && expandedPost.id === postId) {
+        dispatch(setExpandedPostAction(undefined));
+      }
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
 };
 
 export const dislikePost = postId => async (dispatch, getRootState) => {
