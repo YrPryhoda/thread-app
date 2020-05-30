@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button, Icon, Image, Segment } from 'semantic-ui-react';
 
@@ -10,10 +10,12 @@ const AddPost = ({
   uploadImage,
   post
 }) => {
-  const [body, setBody] = useState(post ? post.body : '');
+  const [body, setBody] = useState('');
   const [image, setImage] = useState(undefined);
   const [isUploading, setIsUploading] = useState(false);
-
+  useEffect(() => {
+    if (post && post.body) setBody(post.body);
+  }, [post]);
   const handleAddPost = async () => {
     if (!body) {
       return;

@@ -41,6 +41,7 @@ const Thread = ({
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
+
   const toggleShowOwnPosts = () => {
     setShowOwnPosts(!showOwnPosts);
     postsFilter.userId = showOwnPosts ? undefined : userId;
@@ -100,7 +101,17 @@ const Thread = ({
           />
         ))}
       </InfiniteScroll>
-      {expandedPost && <ExpandedPost sharePost={sharePost} />}
+      {
+        expandedPost
+        && (
+          <ExpandedPost
+            sharePost={sharePost}
+            uploadImage={uploadImage}
+            sendEditedPost={editOwnPost}
+            editPost={editPost}
+          />
+        )
+      }
       {sharedPostId && <SharedPostLink postId={sharedPostId} close={() => setSharedPostId(undefined)} />}
     </div>
   );
@@ -111,7 +122,7 @@ Thread.propTypes = {
   hasMorePosts: PropTypes.bool,
   expandedPost: PropTypes.objectOf(PropTypes.any),
   userId: PropTypes.string,
-  postToEdit: PropTypes.string.isRequired,
+  postToEdit: PropTypes.string,
   loadPosts: PropTypes.func.isRequired,
   loadMorePosts: PropTypes.func.isRequired,
   reactPost: PropTypes.func.isRequired,
@@ -126,7 +137,8 @@ Thread.defaultProps = {
   posts: [],
   hasMorePosts: true,
   expandedPost: undefined,
-  userId: undefined
+  userId: undefined,
+  postToEdit: undefined
 };
 
 const mapStateToProps = rootState => ({

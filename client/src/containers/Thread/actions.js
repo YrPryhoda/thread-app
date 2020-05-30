@@ -72,13 +72,13 @@ export const sendEditedPost = (post, postId) => async (dispatch, getRootState) =
     const newPost = await postService.getPost(id);
     const { posts } = getRootState();
     const index = posts.posts.findIndex(el => el.id === id);
-    console.log(index, '<<index', posts.posts, '<<posts');
     const result = [
       ...posts.posts.slice(0, index),
       newPost,
       ...posts.posts.slice(index + 1)
     ];
     dispatch(changePostAfterEdit(result));
+    dispatch(setExpandedPostAction(newPost));
   }
   dispatch(editPostAction(null));
 };

@@ -80,8 +80,12 @@ Post.propTypes = {
   toggleExpandedPost: PropTypes.func.isRequired,
   sharePost: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
-  postToEdit: PropTypes.string.isRequired,
+  postToEdit: PropTypes.string,
   editPost: PropTypes.func.isRequired
+};
+
+Post.defaultProps = {
+  postToEdit: undefined
 };
 
 export default Post;
