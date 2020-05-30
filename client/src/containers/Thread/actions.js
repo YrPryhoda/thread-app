@@ -4,6 +4,8 @@ import {
   ADD_POST,
   LOAD_MORE_POSTS,
   SET_ALL_POSTS,
+  EDIT_POST,
+  LOAD_EDITED_POST,
   SET_EXPANDED_POST
 } from './actionTypes';
 
@@ -19,6 +21,15 @@ const addMorePostsAction = posts => ({
 
 const addPostAction = post => ({
   type: ADD_POST,
+  post
+});
+const editPostAction = postId => ({
+  type: EDIT_POST,
+  postId
+});
+
+const changePostAfterEdit = post => ({
+  type: LOAD_EDITED_POST,
   post
 });
 
@@ -49,6 +60,27 @@ export const addPost = post => async dispatch => {
   const { id } = await postService.addPost(post);
   const newPost = await postService.getPost(id);
   dispatch(addPostAction(newPost));
+};
+
+export const defineEditedPost = id => dispatch => {
+  dispatch(editPostAction(id));
+};
+
+export const sendEditedPost = (post, postId) => async (dispatch, getRootState) => {
+  const { id } = await postService.editPost(post, postId);
+  if (id) {
+    const newPost = await postService.getPost(id);
+    const { posts } = getRootState();
+    const index = posts.posts.findIndex(el => el.id === id);
+    const result = [
+      ...posts.posts.slice(0, index),
+      newPost,
+      ...posts.posts.slice(index + 1)
+    ];
+    dispatch(changePostAfterEdit(result));
+    dispatch(setExpandedPostAction(newPost));
+  }
+  dispatch(editPostAction(null));
 };
 
 export const toggleExpandedPost = postId => async dispatch => {

@@ -2,6 +2,8 @@ import {
   SET_ALL_POSTS,
   LOAD_MORE_POSTS,
   ADD_POST,
+  LOAD_EDITED_POST,
+  EDIT_POST,
   SET_EXPANDED_POST
 } from './actionTypes';
 
@@ -23,6 +25,16 @@ export default (state = {}, action) => {
       return {
         ...state,
         posts: [action.post, ...state.posts]
+      };
+    case EDIT_POST:
+      return {
+        ...state,
+        postToEdit: action.postId
+      };
+    case LOAD_EDITED_POST:
+      return {
+        ...state,
+        posts: action.post
       };
     case SET_EXPANDED_POST:
       return {

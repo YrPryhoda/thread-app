@@ -10,6 +10,19 @@ export const create = (userId, post) => postRepository.create({
   userId
 });
 
+export const editPostById = async (userId, newPost) => {
+  const { id, body } = newPost;
+  const post = await getPostById(id);
+  let result;
+  if (post.user.id === userId) {
+    await postRepository.updateById(id, { body });
+    result = { id };
+  } else {
+    result = { id: null };
+  }
+  return result;
+};
+
 export const setReaction = async (userId, { postId, isLike }) => {
   const reaction = await postReactionRepository.getPostReaction(userId, postId);
   const updateOrDelete = react => (react.isLike === isLike

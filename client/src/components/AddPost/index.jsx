@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button, Icon, Image, Segment } from 'semantic-ui-react';
 
@@ -6,17 +6,25 @@ import styles from './styles.module.scss';
 
 const AddPost = ({
   addPost,
-  uploadImage
+  updatePost,
+  uploadImage,
+  post
 }) => {
   const [body, setBody] = useState('');
   const [image, setImage] = useState(undefined);
   const [isUploading, setIsUploading] = useState(false);
-
+  useEffect(() => {
+    if (post && post.body) setBody(post.body);
+  }, [post]);
   const handleAddPost = async () => {
     if (!body) {
       return;
     }
-    await addPost({ imageId: image?.imageId, body });
+    if (post && post.id) {
+      await updatePost({ id: post.id, imageId: image?.imageId, body });
+    } else {
+      await addPost({ imageId: image?.imageId, body });
+    }
     setBody('');
     setImage(undefined);
   };
@@ -56,9 +64,15 @@ const AddPost = ({
     </Segment>
   );
 };
+AddPost.defaultProps = {
+  addPost: undefined,
+  updatePost: undefined
+};
 
 AddPost.propTypes = {
-  addPost: PropTypes.func.isRequired,
+  addPost: PropTypes.func,
+  updatePost: PropTypes.func,
+  post: PropTypes.objectOf(PropTypes.any).isRequired,
   uploadImage: PropTypes.func.isRequired
 };
 

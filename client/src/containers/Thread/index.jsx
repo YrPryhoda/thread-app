@@ -10,7 +10,11 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
-import { loadPosts, loadMorePosts, toggleExpandedPost, addPost, dislikePost, reactPost } from './actions';
+import {
+  defineEditedPost,
+  loadPosts, loadMorePosts, toggleExpandedPost,
+  addPost, sendEditedPost, dislikePost, reactPost
+} from './actions';
 
 import styles from './styles.module.scss';
 
@@ -26,7 +30,10 @@ const Thread = ({
   loadMorePosts: loadMore,
   posts = [],
   expandedPost,
+  postToEdit,
   hasMorePosts,
+  defineEditedPost: updatePost,
+  sendEditedPost: editOwnPost,
   addPost: createPost,
   reactPost: react,
   dislikePost: dislike,
@@ -34,6 +41,7 @@ const Thread = ({
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
+
   const toggleShowOwnPosts = () => {
     setShowOwnPosts(!showOwnPosts);
     postsFilter.userId = showOwnPosts ? undefined : userId;
@@ -50,6 +58,10 @@ const Thread = ({
 
   const sharePost = id => {
     setSharedPostId(id);
+  };
+
+  const editPost = id => {
+    updatePost(id);
   };
 
   const uploadImage = file => imageService.uploadImage(file);
@@ -75,16 +87,31 @@ const Thread = ({
       >
         {posts.map(post => (
           <Post
+            userId={userId}
             post={post}
             reactPost={react}
             dislikePost={dislike}
             toggleExpandedPost={toggle}
             sharePost={sharePost}
+            uploadImage={uploadImage}
+            sendEditedPost={editOwnPost}
+            editPost={editPost}
+            postToEdit={postToEdit}
             key={post.id}
           />
         ))}
       </InfiniteScroll>
-      {expandedPost && <ExpandedPost sharePost={sharePost} />}
+      {
+        expandedPost
+        && (
+          <ExpandedPost
+            sharePost={sharePost}
+            uploadImage={uploadImage}
+            sendEditedPost={editOwnPost}
+            editPost={editPost}
+          />
+        )
+      }
       {sharedPostId && <SharedPostLink postId={sharedPostId} close={() => setSharedPostId(undefined)} />}
     </div>
   );
@@ -95,9 +122,12 @@ Thread.propTypes = {
   hasMorePosts: PropTypes.bool,
   expandedPost: PropTypes.objectOf(PropTypes.any),
   userId: PropTypes.string,
+  postToEdit: PropTypes.string,
   loadPosts: PropTypes.func.isRequired,
   loadMorePosts: PropTypes.func.isRequired,
   reactPost: PropTypes.func.isRequired,
+  defineEditedPost: PropTypes.func.isRequired,
+  sendEditedPost: PropTypes.func.isRequired,
   dislikePost: PropTypes.func.isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired
@@ -107,14 +137,16 @@ Thread.defaultProps = {
   posts: [],
   hasMorePosts: true,
   expandedPost: undefined,
-  userId: undefined
+  userId: undefined,
+  postToEdit: undefined
 };
 
 const mapStateToProps = rootState => ({
   posts: rootState.posts.posts,
   hasMorePosts: rootState.posts.hasMorePosts,
   expandedPost: rootState.posts.expandedPost,
-  userId: rootState.profile.user.id
+  userId: rootState.profile.user.id,
+  postToEdit: rootState.posts.postToEdit
 });
 
 const actions = {
@@ -123,6 +155,8 @@ const actions = {
   reactPost,
   dislikePost,
   toggleExpandedPost,
+  sendEditedPost,
+  defineEditedPost,
   addPost
 };
 
