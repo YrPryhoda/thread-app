@@ -10,7 +10,7 @@ const Post = ({
   post, reactPost, dislikePost,
   toggleExpandedPost, sharePost,
   userId, uploadImage, sendEditedPost,
-  editPost, postToEdit
+  editPost, postToEdit, deletePost
 }) => {
   const {
     id,
@@ -61,9 +61,26 @@ const Post = ({
         {
           user.id === userId
           && (
-            <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => editPost(id)}>
-              <Icon name="edit" />
-            </Label>
+            <>
+              <Label
+                basic
+                size="large"
+                as="a"
+                className={styles.right}
+                onClick={() => deletePost(id)}
+              >
+                <Icon name="eraser" />
+              </Label>
+              <Label
+                basic
+                size="large"
+                as="a"
+                className={styles.right}
+                onClick={() => editPost(id)}
+              >
+                <Icon name="edit" />
+              </Label>
+            </>
           )
         }
       </Card.Content>
@@ -81,7 +98,8 @@ Post.propTypes = {
   sharePost: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
   postToEdit: PropTypes.string,
-  editPost: PropTypes.func.isRequired
+  editPost: PropTypes.func.isRequired,
+  deletePost: PropTypes.func.isRequired
 };
 
 Post.defaultProps = {

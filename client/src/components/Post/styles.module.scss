@@ -1,3 +1,7 @@
 :global(.ui.basic.label).toolbarBtn {
   border: none
 }
+:global(.ui.basic.label).right {
+  float: right;
+  border: none;
+}

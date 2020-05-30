@@ -36,6 +36,9 @@ router
       }
       return res.send(reaction);
     })
+    .catch(next))
+  .delete('/delete/:id', (req, res, next) => postService.deleteById(req.params.id)
+    .then(reaction => res.send({ result: reaction }))
     .catch(next));
 
 export default router;

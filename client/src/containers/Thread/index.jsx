@@ -10,8 +10,9 @@ import AddPost from 'src/components/AddPost';
 import SharedPostLink from 'src/components/SharedPostLink';
 import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
+import ModalWindow from 'src/components/ModalConfirm';
 import {
-  defineEditedPost,
+  defineEditedPost, deletePostById,
   loadPosts, loadMorePosts, toggleExpandedPost,
   addPost, sendEditedPost, dislikePost, reactPost
 } from './actions';
@@ -30,6 +31,7 @@ const Thread = ({
   loadMorePosts: loadMore,
   posts = [],
   expandedPost,
+  deletePostById: deleteById,
   postToEdit,
   hasMorePosts,
   defineEditedPost: updatePost,
@@ -41,6 +43,25 @@ const Thread = ({
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
+  const [modalToDelete, setModalDelete] = useState({
+    id: null,
+    open: false
+  });
+
+  const deletePost = id => setModalDelete({
+    id,
+    open: true
+  });
+
+  const closeModal = () => setModalDelete({
+    id: null,
+    open: false
+  });
+
+  const sendDeleteRequest = postId => {
+    deleteById(postId);
+    closeModal();
+  };
 
   const toggleShowOwnPosts = () => {
     setShowOwnPosts(!showOwnPosts);
@@ -97,6 +118,7 @@ const Thread = ({
             sendEditedPost={editOwnPost}
             editPost={editPost}
             postToEdit={postToEdit}
+            deletePost={deletePost}
             key={post.id}
           />
         ))}
@@ -109,10 +131,21 @@ const Thread = ({
             uploadImage={uploadImage}
             sendEditedPost={editOwnPost}
             editPost={editPost}
+            deletePost={deletePost}
           />
         )
       }
       {sharedPostId && <SharedPostLink postId={sharedPostId} close={() => setSharedPostId(undefined)} />}
+      {
+        modalToDelete.open
+        && (
+          <ModalWindow
+            data={modalToDelete}
+            confirmDelete={sendDeleteRequest}
+            close={closeModal}
+          />
+        )
+      }
     </div>
   );
 };
@@ -130,7 +163,8 @@ Thread.propTypes = {
   sendEditedPost: PropTypes.func.isRequired,
   dislikePost: PropTypes.func.isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
-  addPost: PropTypes.func.isRequired
+  addPost: PropTypes.func.isRequired,
+  deletePostById: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -157,6 +191,7 @@ const actions = {
   toggleExpandedPost,
   sendEditedPost,
   defineEditedPost,
+  deletePostById,
   addPost
 };
 

@@ -23,6 +23,12 @@ const addPostAction = post => ({
   type: ADD_POST,
   post
 });
+
+const deletePostAction = posts => ({
+  type: SET_ALL_POSTS,
+  posts
+});
+
 const editPostAction = postId => ({
   type: EDIT_POST,
   postId
@@ -62,6 +68,22 @@ export const addPost = post => async dispatch => {
   dispatch(addPostAction(newPost));
 };
 
+export const deletePostById = postId => async (dispatch, getRootState) => {
+  try {
+    const { result } = await postService.deletePost(postId);
+    if (Number(result)) {
+      const { posts: { posts, expandedPost } } = getRootState();
+      const newPosts = posts.filter(el => el.id !== postId);
+      dispatch(deletePostAction(newPosts));
+      if (expandedPost && expandedPost.id === postId) {
+        dispatch(deletePostAction(newPosts));
+      }
+    }
+  } catch (err) {
+    console.log(err.message);
+  }
+};
+
 export const defineEditedPost = id => dispatch => {
   dispatch(editPostAction(id));
 };
@@ -78,7 +100,9 @@ export const sendEditedPost = (post, postId) => async (dispatch, getRootState) =
       ...posts.posts.slice(index + 1)
     ];
     dispatch(changePostAfterEdit(result));
-    dispatch(setExpandedPostAction(newPost));
+    if (posts.expandedPost && posts.expandedPost.id === id) {
+      dispatch(setExpandedPostAction(newPost));
+    }
   }
   dispatch(editPostAction(null));
 };

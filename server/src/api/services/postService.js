@@ -10,6 +10,8 @@ export const create = (userId, post) => postRepository.create({
   userId
 });
 
+export const deleteById = id => postRepository.deleteById(id);
+
 export const editPostById = async (userId, newPost) => {
   const { id, body } = newPost;
   const post = await getPostById(id);

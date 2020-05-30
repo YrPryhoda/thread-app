@@ -35,6 +35,14 @@ export const getPost = async id => {
   return response.json();
 };
 
+export const deletePost = async id => {
+  const response = await callWebApi({
+    endpoint: `/api/posts/delete/${id}`,
+    type: 'DELETE'
+  });
+  return response.json();
+};
+
 export const reactPost = async postId => {
   const response = await callWebApi({
     endpoint: '/api/posts/react',
