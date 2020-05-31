@@ -91,6 +91,17 @@ export const sendEditedPost = (post, postId) => async (dispatch, getRootState) =
   dispatch(editPostAction(null));
 };
 
+export const updatePostsComment = comment => async dispatch => {
+  const { id } = await commentService.updateComment(comment);
+  console.log(id);
+  if (id) {
+    const newPost = await postService.getPost(id);
+    console.log(newPost, '<<<< new post');
+    dispatch(setExpandedPostAction(newPost));
+  }
+  dispatch(editPostAction(null));
+};
+
 export const toggleExpandedPost = postId => async dispatch => {
   const post = postId ? await postService.getPost(postId) : undefined;
   dispatch(setExpandedPostAction(post));

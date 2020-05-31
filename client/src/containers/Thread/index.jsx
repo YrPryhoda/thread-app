@@ -127,6 +127,7 @@ const Thread = ({
         expandedPost
         && (
           <ExpandedPost
+            userId={userId}
             sharePost={sharePost}
             uploadImage={uploadImage}
             sendEditedPost={editOwnPost}

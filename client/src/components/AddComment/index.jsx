@@ -1,21 +1,31 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Button } from 'semantic-ui-react';
 
 const AddComment = ({
   postId,
-  addComment
+  addComment,
+  updateComment,
+  comment
 }) => {
   const [body, setBody] = useState('');
-
+  useEffect(() => {
+    if (comment.body) setBody(comment.body);
+  }, []);
   const handleAddComment = async () => {
     if (!body) {
       return;
     }
-    await addComment({ postId, body });
+    if (comment && comment.id) {
+      await updateComment({
+        id: comment.id,
+        body
+      });
+    } else {
+      await addComment({ postId, body });
+    }
     setBody('');
   };
-
   return (
     <Form reply onSubmit={handleAddComment}>
       <Form.TextArea
@@ -30,7 +40,14 @@ const AddComment = ({
 
 AddComment.propTypes = {
   addComment: PropTypes.func.isRequired,
-  postId: PropTypes.string.isRequired
+  postId: PropTypes.string.isRequired,
+  updateComment: PropTypes.func,
+  comment: PropTypes.objectOf(PropTypes.any)
+};
+
+AddComment.defaultProps = {
+  updateComment: undefined,
+  comment: {}
 };
 
 export default AddComment;
