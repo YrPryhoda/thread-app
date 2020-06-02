@@ -4,7 +4,13 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { Modal, Comment as CommentUI, Header } from 'semantic-ui-react';
 import moment from 'moment';
-import { reactPost, dislikePost, toggleExpandedPost, addComment } from 'src/containers/Thread/actions';
+import {
+  reactPost,
+  dislikePost,
+  toggleExpandedPost,
+  addComment,
+  updatePostsComment
+} from 'src/containers/Thread/actions';
 import Post from 'src/components/Post';
 import Comment from 'src/components/Comment';
 import AddComment from 'src/components/AddComment';
@@ -22,7 +28,8 @@ const ExpandedPost = ({
   sendEditedPost,
   editPost,
   postToEdit,
-  deletePost
+  deletePost,
+  updatePostsComment: updateComment
 }) => {
   const [editedPost, setEditedPost] = useState(post);
   useEffect(() => {
@@ -52,8 +59,26 @@ const ExpandedPost = ({
               </Header>
               {post.comments && post.comments
                 .sort((c1, c2) => moment(c1.createdAt).diff(c2.createdAt))
-                .map(comment => <Comment key={comment.id} comment={comment} />)}
-              <AddComment postId={post.id} addComment={add} />
+                .map(comment => (postToEdit === comment.id ? (
+                  <AddComment
+                    postId={post.id}
+                    addComment={add}
+                    comment={comment}
+                    updateComment={updateComment}
+                    key={comment.id}
+                  />
+                ) : (
+                  <Comment
+                    key={comment.id}
+                    comment={comment}
+                    editPost={editPost}
+                    deletePost={deletePost}
+                    userId={userId}
+                  />
+                )))}
+              {
+                !postToEdit && <AddComment postId={post.id} addComment={add} />
+              }
             </CommentUI.Group>
           </Modal.Content>
         )
@@ -70,11 +95,12 @@ ExpandedPost.propTypes = {
   addComment: PropTypes.func.isRequired,
   sharePost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
-  postToEdit: PropTypes.func,
+  postToEdit: PropTypes.string,
   uploadImage: PropTypes.func.isRequired,
   sendEditedPost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string.isRequired,
+  updatePostsComment: PropTypes.func.isRequired
 };
 
 ExpandedPost.defaultProps = {
@@ -87,7 +113,13 @@ const mapStateToProps = rootState => ({
   postToEdit: rootState.posts.postToEdit
 });
 
-const actions = { reactPost, dislikePost, toggleExpandedPost, addComment };
+const actions = {
+  reactPost,
+  dislikePost,
+  toggleExpandedPost,
+  addComment,
+  updatePostsComment
+};
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
 

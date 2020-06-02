@@ -18,7 +18,7 @@ const ModalWindow = ({
     closeOnDimmerClick={false}
   >
     <Modal.Content>
-      <p>Are you sure you want to delete your post?</p>
+      <p>Are you sure you want to delete this?</p>
     </Modal.Content>
     <Modal.Actions>
       <Button
@@ -33,7 +33,7 @@ const ModalWindow = ({
         icon="checkmark"
         labelPosition="right"
         content="Yes"
-        onClick={() => confirmDelete(data.id)}
+        onClick={() => confirmDelete(data.id, data.target)}
       />
     </Modal.Actions>
   </Modal>

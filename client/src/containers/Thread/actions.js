@@ -91,6 +91,15 @@ export const sendEditedPost = (post, postId) => async (dispatch, getRootState) =
   dispatch(editPostAction(null));
 };
 
+export const updatePostsComment = comment => async dispatch => {
+  const { id } = await commentService.updateComment(comment);
+  if (id) {
+    const newPost = await postService.getPost(id);
+    dispatch(setExpandedPostAction(newPost));
+  }
+  dispatch(editPostAction(null));
+};
+
 export const toggleExpandedPost = postId => async dispatch => {
   const post = postId ? await postService.getPost(postId) : undefined;
   dispatch(setExpandedPostAction(post));
@@ -109,6 +118,26 @@ export const deletePostById = postId => async (dispatch, getRootState) => {
     }
   } catch (err) {
     console.log(err.message);
+  }
+};
+
+export const deleteComment = commentId => async (dispatch, getRootState) => {
+  try {
+    const { result } = await commentService.deleteComment(commentId);
+    if (Number(result)) {
+      const { posts: { posts, expandedPost } } = getRootState();
+      const newPost = await postService.getPost(expandedPost.id);
+      const index = posts.findIndex(el => el.id === newPost.id);
+      const updatePosts = [
+        ...posts.slice(0, index),
+        newPost,
+        ...posts.slice(index + 1)
+      ];
+      dispatch(setExpandedPostAction(newPost));
+      dispatch(setPostsAction(updatePosts));
+    }
+  } catch (error) {
+    console.log(error);
   }
 };
 
