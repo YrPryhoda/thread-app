@@ -12,7 +12,6 @@ export const updateById = async (user, data) => {
   const isOwner = await commentRepository.getCommentById(id);
   let postId;
   if (user === isOwner.userId) {
-    console.log('true');
     const response = await commentRepository.updateById(id, { body });
     postId = response.postId;
   } else {
@@ -20,4 +19,5 @@ export const updateById = async (user, data) => {
   }
   return { id: postId };
 };
+export const deleteById = id => commentRepository.deleteById(id);
 

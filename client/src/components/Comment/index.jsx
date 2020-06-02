@@ -33,7 +33,7 @@ const Comment = ({
               size="large"
               as="a"
               className={styles.right}
-              onClick={() => deletePost(id)}
+              onClick={() => deletePost(id, 'comment')}
             >
               <Icon name="eraser" />
             </Label>

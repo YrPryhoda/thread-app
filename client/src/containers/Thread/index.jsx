@@ -12,7 +12,7 @@ import { Checkbox, Loader } from 'semantic-ui-react';
 import InfiniteScroll from 'react-infinite-scroller';
 import ModalWindow from 'src/components/ModalConfirm';
 import {
-  defineEditedPost, deletePostById,
+  defineEditedPost, deletePostById, deleteComment,
   loadPosts, loadMorePosts, toggleExpandedPost,
   addPost, sendEditedPost, dislikePost, reactPost
 } from './actions';
@@ -32,6 +32,7 @@ const Thread = ({
   posts = [],
   expandedPost,
   deletePostById: deleteById,
+  deleteComment: deleteCommentById,
   postToEdit,
   hasMorePosts,
   defineEditedPost: updatePost,
@@ -45,21 +46,28 @@ const Thread = ({
   const [showOwnPosts, setShowOwnPosts] = useState(false);
   const [modalToDelete, setModalDelete] = useState({
     id: null,
-    open: false
+    open: false,
+    target: null
   });
 
-  const deletePost = id => setModalDelete({
+  const deletePost = (id, target = 'post') => setModalDelete({
     id,
-    open: true
+    open: true,
+    target
   });
 
   const closeModal = () => setModalDelete({
     id: null,
-    open: false
+    open: false,
+    target: null
   });
 
-  const sendDeleteRequest = postId => {
-    deleteById(postId);
+  const sendDeleteRequest = (postId, target) => {
+    if (target === 'post') {
+      deleteById(postId);
+    } else if (target === 'comment') {
+      deleteCommentById(postId);
+    }
     closeModal();
   };
 
@@ -165,7 +173,8 @@ Thread.propTypes = {
   dislikePost: PropTypes.func.isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired,
-  deletePostById: PropTypes.func.isRequired
+  deletePostById: PropTypes.func.isRequired,
+  deleteComment: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -193,6 +202,7 @@ const actions = {
   sendEditedPost,
   defineEditedPost,
   deletePostById,
+  deleteComment,
   addPost
 };
 

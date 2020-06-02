@@ -25,3 +25,11 @@ export const updateComment = async request => {
   });
   return response.json();
 };
+
+export const deleteComment = async id => {
+  const response = await callWebApi({
+    endpoint: `/api/comments/delete/${id}`,
+    type: 'DELETE'
+  });
+  return response.json();
+};
