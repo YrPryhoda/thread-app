@@ -2,6 +2,8 @@ import sequelize from '../db/connection';
 import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel } from '../models/index';
 import BaseRepository from './baseRepository';
 
+const { Op } = require('sequelize');
+
 const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
 const dislikeCase = bool => `CASE WHEN "postReactions"."isDislike" = ${bool} THEN 1 ELSE 0 END`;
 
@@ -10,14 +12,21 @@ class PostRepository extends BaseRepository {
     const {
       from: offset,
       count: limit,
-      userId
+      userId,
+      filterId
     } = filter;
 
     const where = {};
     if (userId) {
       Object.assign(where, { userId });
     }
-
+    if (filterId) {
+      Object.assign(where, {
+        userId: {
+          [Op.ne]: filterId
+        }
+      });
+    }
     return this.model.findAll({
       where,
       attributes: {

@@ -9,4 +9,7 @@
 
 .toolbar {
   margin: 20px 0;
+  & > div {
+    padding-right: 10px;
+  }
 }

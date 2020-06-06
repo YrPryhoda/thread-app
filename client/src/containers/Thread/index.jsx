@@ -44,6 +44,7 @@ const Thread = ({
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
+  const [hideOwnPosts, setHideOwnPosts] = useState(false);
   const [modalToDelete, setModalDelete] = useState({
     id: null,
     open: false,
@@ -72,11 +73,22 @@ const Thread = ({
   };
 
   const toggleShowOwnPosts = () => {
+    setHideOwnPosts(false);
     setShowOwnPosts(!showOwnPosts);
     postsFilter.userId = showOwnPosts ? undefined : userId;
+    postsFilter.filterId = undefined;
     postsFilter.from = 0;
     load(postsFilter);
     postsFilter.from = postsFilter.count; // for the next scroll
+  };
+  const toggleHideOwnPost = () => {
+    setShowOwnPosts(false);
+    setHideOwnPosts(!hideOwnPosts);
+    postsFilter.filterId = hideOwnPosts ? undefined : userId;
+    postsFilter.userId = undefined;
+    postsFilter.from = 0;
+    load(postsFilter);
+    postsFilter.from = postsFilter.count;
   };
 
   const getMorePosts = () => {
@@ -106,6 +118,12 @@ const Thread = ({
           label="Show only my posts"
           checked={showOwnPosts}
           onChange={toggleShowOwnPosts}
+        />
+        <Checkbox
+          toggle
+          label="Show all posts except mine"
+          checked={hideOwnPosts}
+          onChange={toggleHideOwnPost}
         />
       </div>
       <InfiniteScroll
