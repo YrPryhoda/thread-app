@@ -31,5 +31,5 @@ export const loadCurrentUser = () => async (dispatch, getRootState) => {
 
 export const updateUsersStatus = newStatus => async (dispatch, getRootState) => {
   const user = await authService.updateCurrentStatus(newStatus);
-  console.log(dispatch, getRootState, user);
+  setUser(user)(dispatch, getRootState);
 };

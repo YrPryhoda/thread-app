@@ -16,9 +16,11 @@ import Notifications from 'src/components/Notifications';
 import { loadCurrentUser, logout } from 'src/containers/Profile/actions';
 import { applyPost } from 'src/containers/Thread/actions';
 import PropTypes from 'prop-types';
+import { updateUsersStatus } from '../Profile/actions';
 
 const Routing = ({
   user,
+  updateUsersStatus: updateStatus,
   isAuthorized,
   applyPost: newPost,
   logout: signOut,
@@ -38,7 +40,7 @@ const Routing = ({
         <div className="fill">
           {isAuthorized && (
             <header>
-              <Header user={user} logout={signOut} />
+              <Header user={user} logout={signOut} updateUsersStatus={updateStatus} />
             </header>
           )}
           <main className="fill">
@@ -63,7 +65,8 @@ Routing.propTypes = {
   applyPost: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any),
   isLoading: PropTypes.bool,
-  loadCurrentUser: PropTypes.func.isRequired
+  loadCurrentUser: PropTypes.func.isRequired,
+  updateUsersStatus: PropTypes.func.isRequired
 };
 
 Routing.defaultProps = {
@@ -72,7 +75,12 @@ Routing.defaultProps = {
   isLoading: true
 };
 
-const actions = { loadCurrentUser, logout, applyPost };
+const actions = {
+  loadCurrentUser,
+  logout,
+  applyPost,
+  updateUsersStatus
+};
 
 const mapStateToProps = ({ profile }) => ({
   isAuthorized: profile.isAuthorized,

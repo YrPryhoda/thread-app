@@ -18,7 +18,7 @@ const Profile = ({
   const onChange = e => setStatus(e.target.value);
   const changeStatus = e => {
     e.preventDefault();
-    updateStatus(status);
+    updateStatus({ status });
   };
   return (
     <Grid container textAlign="center" style={{ paddingTop: 30 }}>

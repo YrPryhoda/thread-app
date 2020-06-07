@@ -92,7 +92,7 @@ class PostRepository extends BaseRepository {
         model: CommentModel,
         include: {
           model: UserModel,
-          attributes: ['id', 'username'],
+          attributes: ['id', 'username', 'status'],
           include: {
             model: ImageModel,
             attributes: ['id', 'link']
@@ -100,7 +100,7 @@ class PostRepository extends BaseRepository {
         }
       }, {
         model: UserModel,
-        attributes: ['id', 'username'],
+        attributes: ['id', 'username', 'status'],
         include: {
           model: ImageModel,
           attributes: ['id', 'link']
