@@ -29,3 +29,17 @@ export const getCurrentUser = async () => {
     return null;
   }
 };
+
+export const updateCurrentStatus = async request => {
+  try {
+    const response = await callWebApi({
+      endpoint: '/api/auth/user',
+      type: 'POST',
+      request
+    });
+    return response.json();
+  } catch (e) {
+    console.log(e);
+    return null;
+  }
+};

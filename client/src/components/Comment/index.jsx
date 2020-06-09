@@ -21,6 +21,13 @@ const Comment = ({
       <CommentUI.Metadata>
         {moment(createdAt).fromNow()}
       </CommentUI.Metadata>
+      { user.status && (
+        <CommentUI.Content>
+          <CommentUI.Metadata>
+            {user.status}
+          </CommentUI.Metadata>
+        </CommentUI.Content>
+      )}
       <CommentUI.Text>
         {body}
       </CommentUI.Text>

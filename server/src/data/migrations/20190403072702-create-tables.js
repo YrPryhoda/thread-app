@@ -20,6 +20,10 @@ export default {
           type: Sequelize.STRING,
           unique: true
         },
+        status: {
+          allowNull: true,
+          type: Sequelize.STRING
+        },
         password: {
           allowNull: false,
           type: Sequelize.STRING

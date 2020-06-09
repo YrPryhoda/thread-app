@@ -13,9 +13,9 @@ class PostRepository extends BaseRepository {
       from: offset,
       count: limit,
       userId,
-      filterId
+      filterId,
+      showLiked
     } = filter;
-
     const where = {};
     if (userId) {
       Object.assign(where, { userId });
@@ -52,6 +52,9 @@ class PostRepository extends BaseRepository {
       }, {
         model: PostReactionModel,
         attributes: [],
+        where: showLiked ? {
+          userId: showLiked
+        } : null,
         duplicating: false
       }],
       group: [
@@ -92,7 +95,7 @@ class PostRepository extends BaseRepository {
         model: CommentModel,
         include: {
           model: UserModel,
-          attributes: ['id', 'username'],
+          attributes: ['id', 'username', 'status'],
           include: {
             model: ImageModel,
             attributes: ['id', 'link']
@@ -100,7 +103,7 @@ class PostRepository extends BaseRepository {
         }
       }, {
         model: UserModel,
-        attributes: ['id', 'username'],
+        attributes: ['id', 'username', 'status'],
         include: {
           model: ImageModel,
           attributes: ['id', 'link']

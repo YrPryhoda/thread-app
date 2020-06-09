@@ -21,6 +21,8 @@ import styles from './styles.module.scss';
 
 const postsFilter = {
   userId: undefined,
+  showLiked: null,
+  filterId: null,
   from: 0,
   count: 10
 };
@@ -45,6 +47,7 @@ const Thread = ({
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
   const [hideOwnPosts, setHideOwnPosts] = useState(false);
+  const [likedByMe, setLikedByMe] = useState(false);
   const [modalToDelete, setModalDelete] = useState({
     id: null,
     open: false,
@@ -74,18 +77,33 @@ const Thread = ({
 
   const toggleShowOwnPosts = () => {
     setHideOwnPosts(false);
+    setLikedByMe(false);
     setShowOwnPosts(!showOwnPosts);
     postsFilter.userId = showOwnPosts ? undefined : userId;
     postsFilter.filterId = undefined;
+    postsFilter.showLiked = undefined;
     postsFilter.from = 0;
     load(postsFilter);
     postsFilter.from = postsFilter.count; // for the next scroll
   };
   const toggleHideOwnPost = () => {
     setShowOwnPosts(false);
+    setLikedByMe(false);
     setHideOwnPosts(!hideOwnPosts);
     postsFilter.filterId = hideOwnPosts ? undefined : userId;
     postsFilter.userId = undefined;
+    postsFilter.showLiked = undefined;
+    postsFilter.from = 0;
+    load(postsFilter);
+    postsFilter.from = postsFilter.count;
+  };
+  const togglePostsLikedByMe = () => {
+    setShowOwnPosts(false);
+    setHideOwnPosts(false);
+    setLikedByMe(!likedByMe);
+    postsFilter.showLiked = likedByMe ? undefined : userId;
+    postsFilter.userId = undefined;
+    postsFilter.filterId = undefined;
     postsFilter.from = 0;
     load(postsFilter);
     postsFilter.from = postsFilter.count;
@@ -115,15 +133,21 @@ const Thread = ({
       <div className={styles.toolbar}>
         <Checkbox
           toggle
-          label="Show only my posts"
+          label="Show my posts"
           checked={showOwnPosts}
           onChange={toggleShowOwnPosts}
         />
         <Checkbox
           toggle
-          label="Show all posts except mine"
+          label="Hide my posts"
           checked={hideOwnPosts}
           onChange={toggleHideOwnPost}
+        />
+        <Checkbox
+          toggle
+          label="Liked by me"
+          checked={likedByMe}
+          onChange={togglePostsLikedByMe}
         />
       </div>
       <InfiniteScroll
