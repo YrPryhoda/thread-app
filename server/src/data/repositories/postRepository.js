@@ -13,9 +13,9 @@ class PostRepository extends BaseRepository {
       from: offset,
       count: limit,
       userId,
-      filterId
+      filterId,
+      showLiked
     } = filter;
-
     const where = {};
     if (userId) {
       Object.assign(where, { userId });
@@ -52,6 +52,9 @@ class PostRepository extends BaseRepository {
       }, {
         model: PostReactionModel,
         attributes: [],
+        where: showLiked ? {
+          userId: showLiked
+        } : null,
         duplicating: false
       }],
       group: [
