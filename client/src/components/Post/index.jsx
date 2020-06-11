@@ -58,10 +58,10 @@ const Post = ({
         >
           <Icon name="thumbs up" />
           <span
-            onMouseOver={e => onHover(e, id, true)}
-            onMouseOut={e => onHover(e, id, false)}
-            onFocus={e => onHover(e, id, true)}
-            onBlur={e => onHover(e, id, false)}
+            onMouseOver={() => onHover(post, true)}
+            onMouseOut={() => onHover(post, false)}
+            onFocus={() => onHover(post, true)}
+            onBlur={() => onHover(post, false)}
           >
             {likeCount}
           </span>

@@ -131,13 +131,17 @@ const Thread = ({
 
   const onLikeBlockHover = postId => getUsersLikes(postId);
 
-  function toggleLikeBlock(event, postId, toggleTrigger) {
+  function toggleLikeBlock(post, toggleTrigger) {
     if (!onMouseHover.show && toggleTrigger) {
       setOnHover({
-        postId,
+        postId: post.id,
         show: true
       });
-      onLikeBlockHover(postId);
+      if (!post.likers) {
+        onLikeBlockHover(post.id);
+      } else if (post.likers.length !== +post.likeCount) {
+        onLikeBlockHover(post.id);
+      }
     } else {
       setOnHover({
         postId: null,
@@ -208,7 +212,8 @@ const Thread = ({
             sendEditedPost={editOwnPost}
             editPost={editPost}
             deletePost={deletePost}
-            onHover={onLikeBlockHover}
+            onHover={toggleLikeBlock}
+            onMouseHover={onMouseHover}
           />
         )
       }

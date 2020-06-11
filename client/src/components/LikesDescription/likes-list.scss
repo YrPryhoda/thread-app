@@ -1,9 +1,10 @@
 .block-absolute {
   position: absolute;
   border: 1px solid rgb(216, 214, 214);
-  background-color:rgb(233, 233, 233);
+  background-color:rgb(243, 239, 239);
   color: #000000;
   padding: 0.3rem 2rem;
+  z-index: 999999 !important;
   bottom: 40px;
   & li {
     text-decoration: underline;

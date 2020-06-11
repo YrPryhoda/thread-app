@@ -70,15 +70,18 @@ export const applyPost = postId => async dispatch => {
 
 export const getUsersWhoLikesPost = postId => async (dispatch, getRootState) => {
   const likers = await postService.getLikedUsers(postId);
-  const { posts: { posts } } = getRootState();
-  const index = posts.findIndex(el => el.id === postId);
-  const newPost = { ...posts[index], likers };
+  const { posts } = getRootState();
+  const index = posts.posts.findIndex(el => el.id === postId);
+  const newPost = { ...posts.posts[index], likers };
   const result = [
-    ...posts.slice(0, index),
+    ...posts.posts.slice(0, index),
     newPost,
-    ...posts.slice(index + 1)
+    ...posts.posts.slice(index + 1)
   ];
   dispatch(showLikes(result));
+  if (posts.expandedPost && posts.expandedPost.id === postId) {
+    dispatch(setExpandedPostAction(newPost));
+  }
 };
 
 export const addPost = post => async dispatch => {
