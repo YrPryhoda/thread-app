@@ -30,7 +30,7 @@ export const getCurrentUser = async () => {
   }
 };
 
-export const updateCurrentStatus = async request => {
+export const updateProdileField = async request => {
   try {
     const response = await callWebApi({
       endpoint: '/api/auth/user',

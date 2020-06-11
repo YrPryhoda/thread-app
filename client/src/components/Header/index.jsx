@@ -6,12 +6,12 @@ import { Header as HeaderUI, Image, Grid, Icon, Input, Button } from 'semantic-u
 
 import styles from './styles.module.scss';
 
-const Header = ({ user, logout, updateUsersStatus }) => {
+const Header = ({ user, logout, updatePersonalField }) => {
   const [status, setStatus] = useState(user.status || '');
   const [isEditStatus, setIsEdit] = useState(false);
   const onChange = e => setStatus(e.target.value);
   const changeStatus = () => {
-    updateUsersStatus({ status });
+    updatePersonalField({ status });
     setIsEdit(false);
   };
   return (
@@ -78,7 +78,7 @@ const Header = ({ user, logout, updateUsersStatus }) => {
 Header.propTypes = {
   logout: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any).isRequired,
-  updateUsersStatus: PropTypes.func.isRequired
+  updatePersonalField: PropTypes.func.isRequired
 };
 
 export default Header;
