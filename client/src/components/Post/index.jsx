@@ -1,5 +1,6 @@
 import React from 'react';
 import AddPost from 'src/components/AddPost';
+import LikesList from 'src/components/LikesDescription';
 import PropTypes from 'prop-types';
 import { Card, Image, Label, Icon } from 'semantic-ui-react';
 import moment from 'moment';
@@ -10,7 +11,8 @@ const Post = ({
   post, reactPost, dislikePost,
   toggleExpandedPost, sharePost,
   userId, uploadImage, sendEditedPost,
-  editPost, postToEdit, deletePost
+  editPost, postToEdit, deletePost,
+  onHover, onMouseHover
 }) => {
   const {
     id,
@@ -18,6 +20,7 @@ const Post = ({
     body,
     user,
     likeCount,
+    likers,
     dislikeCount,
     commentCount,
     createdAt
@@ -26,7 +29,9 @@ const Post = ({
   return postToEdit === id ? (
     <AddPost uploadImage={uploadImage} updatePost={sendEditedPost} post={post} />
   ) : (
-    <Card style={{ width: '100%' }}>
+    <Card
+      style={{ width: '100%' }}
+    >
       {image && <Image src={image.link} wrapped ui={false} />}
       <Card.Content>
         <Card.Meta>
@@ -43,9 +48,23 @@ const Post = ({
         </Card.Description>
       </Card.Content>
       <Card.Content extra>
-        <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => reactPost(id)}>
+        {onMouseHover.show && onMouseHover.postId === id && (<LikesList users={likers} />)}
+        <Label
+          basic
+          size="small"
+          as="a"
+          className={styles.toolbarBtn}
+          onClick={() => reactPost(id)}
+        >
           <Icon name="thumbs up" />
-          {likeCount}
+          <span
+            onMouseOver={e => onHover(e, id, true)}
+            onMouseOut={e => onHover(e, id, false)}
+            onFocus={e => onHover(e, id, true)}
+            onBlur={e => onHover(e, id, false)}
+          >
+            {likeCount}
+          </span>
         </Label>
         <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => dislikePost(id)}>
           <Icon name="thumbs down" />
@@ -90,6 +109,7 @@ const Post = ({
 
 Post.propTypes = {
   post: PropTypes.objectOf(PropTypes.any).isRequired,
+  onMouseHover: PropTypes.objectOf(PropTypes.any),
   reactPost: PropTypes.func.isRequired,
   dislikePost: PropTypes.func.isRequired,
   uploadImage: PropTypes.func.isRequired,
@@ -99,11 +119,13 @@ Post.propTypes = {
   userId: PropTypes.string.isRequired,
   postToEdit: PropTypes.string,
   editPost: PropTypes.func.isRequired,
-  deletePost: PropTypes.func.isRequired
+  deletePost: PropTypes.func.isRequired,
+  onHover: PropTypes.func.isRequired
 };
 
 Post.defaultProps = {
-  postToEdit: undefined
+  postToEdit: undefined,
+  onMouseHover: {}
 };
 
 export default Post;

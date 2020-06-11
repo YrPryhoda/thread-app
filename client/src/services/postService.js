@@ -54,6 +54,7 @@ export const reactPost = async postId => {
   });
   return response.json();
 };
+
 export const reactPostNegative = async postId => {
   const response = await callWebApi({
     endpoint: '/api/posts/react-negative',
@@ -62,6 +63,14 @@ export const reactPostNegative = async postId => {
       postId,
       isDislike: true
     }
+  });
+  return response.json();
+};
+
+export const getLikedUsers = async postId => {
+  const response = await callWebApi({
+    endpoint: `/api/posts/likers/${postId}`,
+    type: 'GET'
   });
   return response.json();
 };

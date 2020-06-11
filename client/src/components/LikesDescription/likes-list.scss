@@ -1,0 +1,13 @@
+.block-absolute {
+  position: absolute;
+  border: 1px solid rgb(216, 214, 214);
+  background-color:rgb(233, 233, 233);
+  color: #000000;
+  padding: 0.3rem 2rem;
+  bottom: 40px;
+  & li {
+    text-decoration: underline;
+    text-decoration-color: rgb(216, 214, 214);
+  }
+}
+

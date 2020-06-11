@@ -10,6 +10,9 @@ router
   .get('/:id', (req, res, next) => postService.getPostById(req.params.id)
     .then(post => res.send(post))
     .catch(next))
+  .get('/likers/:postId', (req, res, next) => postService.getLikers(req.params.postId)
+    .then(post => res.send(post))
+    .catch(next))
   .post('/', (req, res, next) => postService.create(req.user.id, req.body)
     .then(post => {
       req.io.emit('new_post', post); // notify all users that a new post was created
