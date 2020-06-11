@@ -4,7 +4,8 @@ import {
   ADD_POST,
   LOAD_EDITED_POST,
   EDIT_POST,
-  SET_EXPANDED_POST
+  SET_EXPANDED_POST,
+  SHOW_LIKES
 } from './actionTypes';
 
 export default (state = {}, action) => {
@@ -31,6 +32,7 @@ export default (state = {}, action) => {
         ...state,
         postToEdit: action.postId
       };
+    case SHOW_LIKES:
     case LOAD_EDITED_POST:
       return {
         ...state,

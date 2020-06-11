@@ -66,13 +66,14 @@ const AddPost = ({
 };
 AddPost.defaultProps = {
   addPost: undefined,
-  updatePost: undefined
+  updatePost: undefined,
+  post: {}
 };
 
 AddPost.propTypes = {
   addPost: PropTypes.func,
   updatePost: PropTypes.func,
-  post: PropTypes.objectOf(PropTypes.any).isRequired,
+  post: PropTypes.objectOf(PropTypes.any),
   uploadImage: PropTypes.func.isRequired
 };
 

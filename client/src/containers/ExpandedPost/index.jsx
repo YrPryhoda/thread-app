@@ -29,7 +29,9 @@ const ExpandedPost = ({
   editPost,
   postToEdit,
   deletePost,
-  updatePostsComment: updateComment
+  updatePostsComment: updateComment,
+  onHover,
+  onMouseHover
 }) => {
   const [editedPost, setEditedPost] = useState(post);
   useEffect(() => {
@@ -52,6 +54,8 @@ const ExpandedPost = ({
               editPost={editPost}
               postToEdit={postToEdit}
               deletePost={deletePost}
+              onHover={onHover}
+              onMouseHover={onMouseHover}
             />
             <CommentUI.Group style={{ maxWidth: '100%' }}>
               <Header as="h3" dividing>
@@ -89,6 +93,7 @@ const ExpandedPost = ({
 
 ExpandedPost.propTypes = {
   post: PropTypes.objectOf(PropTypes.any).isRequired,
+  onMouseHover: PropTypes.objectOf(PropTypes.any).isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
   reactPost: PropTypes.func.isRequired,
   dislikePost: PropTypes.func.isRequired,
@@ -100,7 +105,8 @@ ExpandedPost.propTypes = {
   sendEditedPost: PropTypes.func.isRequired,
   deletePost: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
-  updatePostsComment: PropTypes.func.isRequired
+  updatePostsComment: PropTypes.func.isRequired,
+  onHover: PropTypes.func.isRequired
 };
 
 ExpandedPost.defaultProps = {

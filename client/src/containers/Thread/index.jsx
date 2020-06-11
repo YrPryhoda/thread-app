@@ -14,7 +14,8 @@ import ModalWindow from 'src/components/ModalConfirm';
 import {
   defineEditedPost, deletePostById, deleteComment,
   loadPosts, loadMorePosts, toggleExpandedPost,
-  addPost, sendEditedPost, dislikePost, reactPost
+  addPost, sendEditedPost, dislikePost, reactPost,
+  getUsersWhoLikesPost
 } from './actions';
 
 import styles from './styles.module.scss';
@@ -42,11 +43,16 @@ const Thread = ({
   addPost: createPost,
   reactPost: react,
   dislikePost: dislike,
-  toggleExpandedPost: toggle
+  toggleExpandedPost: toggle,
+  getUsersWhoLikesPost: getUsersLikes
 }) => {
   const [sharedPostId, setSharedPostId] = useState(undefined);
   const [showOwnPosts, setShowOwnPosts] = useState(false);
   const [hideOwnPosts, setHideOwnPosts] = useState(false);
+  const [onMouseHover, setOnHover] = useState({
+    postId: null,
+    show: false
+  });
   const [likedByMe, setLikedByMe] = useState(false);
   const [modalToDelete, setModalDelete] = useState({
     id: null,
@@ -123,6 +129,27 @@ const Thread = ({
     updatePost(id);
   };
 
+  const onLikeBlockHover = postId => getUsersLikes(postId);
+
+  function toggleLikeBlock(post, toggleTrigger) {
+    if (!onMouseHover.show && toggleTrigger) {
+      setOnHover({
+        postId: post.id,
+        show: true
+      });
+      if (!post.likers) {
+        onLikeBlockHover(post.id);
+      } else if (post.likers.length !== +post.likeCount) {
+        onLikeBlockHover(post.id);
+      }
+    } else {
+      setOnHover({
+        postId: null,
+        show: false
+      });
+    }
+  }
+
   const uploadImage = file => imageService.uploadImage(file);
 
   return (
@@ -170,6 +197,8 @@ const Thread = ({
             postToEdit={postToEdit}
             deletePost={deletePost}
             key={post.id}
+            onHover={toggleLikeBlock}
+            onMouseHover={onMouseHover}
           />
         ))}
       </InfiniteScroll>
@@ -183,6 +212,8 @@ const Thread = ({
             sendEditedPost={editOwnPost}
             editPost={editPost}
             deletePost={deletePost}
+            onHover={toggleLikeBlock}
+            onMouseHover={onMouseHover}
           />
         )
       }
@@ -216,7 +247,8 @@ Thread.propTypes = {
   toggleExpandedPost: PropTypes.func.isRequired,
   addPost: PropTypes.func.isRequired,
   deletePostById: PropTypes.func.isRequired,
-  deleteComment: PropTypes.func.isRequired
+  deleteComment: PropTypes.func.isRequired,
+  getUsersWhoLikesPost: PropTypes.func.isRequired
 };
 
 Thread.defaultProps = {
@@ -245,7 +277,8 @@ const actions = {
   defineEditedPost,
   deletePostById,
   deleteComment,
-  addPost
+  addPost,
+  getUsersWhoLikesPost
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);

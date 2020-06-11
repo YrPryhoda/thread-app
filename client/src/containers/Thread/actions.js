@@ -6,8 +6,14 @@ import {
   SET_ALL_POSTS,
   EDIT_POST,
   LOAD_EDITED_POST,
+  SHOW_LIKES,
   SET_EXPANDED_POST
 } from './actionTypes';
+
+const showLikes = post => ({
+  type: SHOW_LIKES,
+  post
+});
 
 const setPostsAction = posts => ({
   type: SET_ALL_POSTS,
@@ -60,6 +66,22 @@ export const loadMorePosts = filter => async (dispatch, getRootState) => {
 export const applyPost = postId => async dispatch => {
   const post = await postService.getPost(postId);
   dispatch(addPostAction(post));
+};
+
+export const getUsersWhoLikesPost = postId => async (dispatch, getRootState) => {
+  const likers = await postService.getLikedUsers(postId);
+  const { posts } = getRootState();
+  const index = posts.posts.findIndex(el => el.id === postId);
+  const newPost = { ...posts.posts[index], likers };
+  const result = [
+    ...posts.posts.slice(0, index),
+    newPost,
+    ...posts.posts.slice(index + 1)
+  ];
+  dispatch(showLikes(result));
+  if (posts.expandedPost && posts.expandedPost.id === postId) {
+    dispatch(setExpandedPostAction(newPost));
+  }
 };
 
 export const addPost = post => async dispatch => {

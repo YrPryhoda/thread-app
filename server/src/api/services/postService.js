@@ -5,6 +5,8 @@ export const getPosts = filter => postRepository.getPosts(filter);
 
 export const getPostById = id => postRepository.getPostById(id);
 
+export const getLikers = postId => postReactionRepository.getLikers(postId);
+
 export const create = (userId, post) => postRepository.create({
   ...post,
   userId
