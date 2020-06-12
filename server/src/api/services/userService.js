@@ -6,6 +6,7 @@ export const getUserById = async userId => {
 };
 
 export const updateUserStatusById = async (userId, data) => {
-  const result = await userRepository.updateById(userId, data);
+  await userRepository.updateById(userId, data);
+  const result = await userRepository.getUserById(userId);
   return result;
 };

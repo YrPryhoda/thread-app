@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { getUserImgLink } from 'src/helpers/imageHelper';
@@ -6,8 +6,11 @@ import {
   Grid,
   Image,
   Input,
+  Icon,
   Button
 } from 'semantic-ui-react';
+import * as imageService from 'src/services/imageService';
+import styles from 'src/components/AddPost/styles.module.scss';
 import { updatePersonalField } from './actions';
 
 const Profile = ({
@@ -20,6 +23,14 @@ const Profile = ({
     usernameFieldProtect: true,
     iconUsername: 'edit'
   });
+  const [image, setImage] = useState(undefined);
+  const [isUploading, setIsUploading] = useState({
+    loading: false,
+    sendButton: false
+  });
+  useEffect(() => {
+    getUserImgLink(user.image);
+  }, [user.image]);
   const onChange = e => setData({
     ...data,
     [e.target.name]: e.target.value
@@ -45,11 +56,60 @@ const Profile = ({
       });
     }
   };
+  const uploadImage = file => imageService.uploadImage(file);
+  const handleUploadFile = async ({ target }) => {
+    setIsUploading({ sendButton: false, loading: true });
+    try {
+      const { id: imageId, link: imageLink } = await uploadImage(target.files[0]);
+      setImage({ imageId, imageLink });
+      setIsUploading({ loading: true, sendButton: false });
+    } finally {
+      setIsUploading({ sendButton: true, loading: false });
+    }
+  };
+  const updateAvatar = async () => {
+    await updateField({ imageId: image.imageId });
+    setImage(undefined);
+  };
 
   return (
     <Grid container textAlign="center" style={{ paddingTop: 30 }}>
       <Grid.Column>
         <Image centered src={getUserImgLink(user.image)} size="medium" circular />
+        <br />
+        <br />
+        {image?.imageLink && (
+          <div className={styles.imageWrapper}>
+            <Image className={styles.profileImage} src={image?.imageLink} alt="post" />
+          </div>
+        )}
+        <Button
+          color="teal"
+          icon
+          labelPosition="left"
+          as="label"
+          loading={isUploading.loading}
+          disabled={isUploading.loading}
+        >
+          <Icon name="image" />
+          Change profile photo
+          <input name="image" type="file" onChange={handleUploadFile} hidden />
+        </Button>
+        {
+          image?.imageId && (
+            <Button
+              color="teal"
+              icon
+              labelPosition="left"
+              disabled={!isUploading.sendButton}
+              onClick={updateAvatar}
+            >
+              <Icon name="check" />
+              Confirm
+            </Button>
+          )
+        }
+        <br />
         <br />
         <Input
           icon="user"

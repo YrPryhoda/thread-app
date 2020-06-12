@@ -7,3 +7,10 @@
   max-width: 150px;
   max-height: 150px;
 }
+
+:global(.ui.image).profileImage {
+  margin: 0 auto;
+  width: auto;
+  max-width: 200px;
+  max-height: 200px;
+}
