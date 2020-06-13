@@ -18,6 +18,11 @@ export default (orm, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
+    passwordToken: {
+      allowNull: true,
+      type: DataTypes.STRING,
+      unique: true
+    },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE
   }, {});

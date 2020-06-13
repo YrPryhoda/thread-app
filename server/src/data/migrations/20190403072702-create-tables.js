@@ -28,6 +28,10 @@ export default {
           allowNull: false,
           type: Sequelize.STRING
         },
+        passwordToken: {
+          allowNull: true,
+          type: Sequelize.STRING
+        },
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
       }, { transaction }),
