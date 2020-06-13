@@ -16,11 +16,11 @@ import Notifications from 'src/components/Notifications';
 import { loadCurrentUser, logout } from 'src/containers/Profile/actions';
 import { applyPost } from 'src/containers/Thread/actions';
 import PropTypes from 'prop-types';
-import { updateUsersStatus } from '../Profile/actions';
+import { updatePersonalField } from '../Profile/actions';
 
 const Routing = ({
   user,
-  updateUsersStatus: updateStatus,
+  updatePersonalField: updateField,
   isAuthorized,
   applyPost: newPost,
   logout: signOut,
@@ -40,7 +40,7 @@ const Routing = ({
         <div className="fill">
           {isAuthorized && (
             <header>
-              <Header user={user} logout={signOut} updateUsersStatus={updateStatus} />
+              <Header user={user} logout={signOut} updatePersonalField={updateField} />
             </header>
           )}
           <main className="fill">
@@ -66,7 +66,7 @@ Routing.propTypes = {
   user: PropTypes.objectOf(PropTypes.any),
   isLoading: PropTypes.bool,
   loadCurrentUser: PropTypes.func.isRequired,
-  updateUsersStatus: PropTypes.func.isRequired
+  updatePersonalField: PropTypes.func.isRequired
 };
 
 Routing.defaultProps = {
@@ -79,7 +79,7 @@ const actions = {
   loadCurrentUser,
   logout,
   applyPost,
-  updateUsersStatus
+  updatePersonalField
 };
 
 const mapStateToProps = ({ profile }) => ({

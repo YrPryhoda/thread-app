@@ -29,7 +29,7 @@ export const loadCurrentUser = () => async (dispatch, getRootState) => {
   setUser(user)(dispatch, getRootState);
 };
 
-export const updateUsersStatus = newStatus => async (dispatch, getRootState) => {
-  const user = await authService.updateCurrentStatus(newStatus);
+export const updatePersonalField = newStatus => async (dispatch, getRootState) => {
+  const user = await authService.updateProdileField(newStatus);
   setUser(user)(dispatch, getRootState);
 };
