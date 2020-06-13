@@ -1,11 +1,13 @@
+import { user, pass } from '../config/mailConfig';
+
 const nodemailer = require('nodemailer');
 
 export const sendMail = async (sendTo, link) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-      user: 'thread.for.customers@gmail.com',
-      pass: 'ThreadSupport2020'
+      user,
+      pass
     }
   });
   const result = await transporter.sendMail({
