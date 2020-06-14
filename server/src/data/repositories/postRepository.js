@@ -53,7 +53,8 @@ class PostRepository extends BaseRepository {
         model: PostReactionModel,
         attributes: [],
         where: showLiked ? {
-          userId: showLiked
+          userId: showLiked,
+          isLike: true
         } : null,
         duplicating: false
       }],
@@ -103,7 +104,7 @@ class PostRepository extends BaseRepository {
         }
       }, {
         model: UserModel,
-        attributes: ['id', 'username', 'status'],
+        attributes: ['id', 'username', 'status', 'email'],
         include: {
           model: ImageModel,
           attributes: ['id', 'link']
