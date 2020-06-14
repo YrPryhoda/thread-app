@@ -1,5 +1,7 @@
 import postRepository from '../../data/repositories/postRepository';
+import userRepository from '../../data/repositories/userRepository';
 import postReactionRepository from '../../data/repositories/postReactionRepository';
+import { sendMail } from '../../helpers/emailHelper';
 
 export const getPosts = filter => postRepository.getPosts(filter);
 
@@ -27,6 +29,12 @@ export const editPostById = async (userId, newPost) => {
   return result;
 };
 
+async function sendNotificationToPostOwner(postId, userId) {
+  const { user } = await postRepository.getPostById(postId);
+  const { id, username } = await userRepository.getUserById(userId);
+  return user.id !== id ? sendMail(user.email, username, 'post') : null;
+}
+
 export const setReaction = async (userId, { postId, isLike }) => {
   const reaction = await postReactionRepository.getPostReaction(userId, postId);
   const updateOrDelete = react => (react.isLike === isLike
@@ -47,10 +55,12 @@ export const setReaction = async (userId, { postId, isLike }) => {
         ...postReactionRepository.getPostReaction(userId, postId),
         isDislike: justify
       };
+      sendNotificationToPostOwner(postId, userId);
     }
   } else {
     await postReactionRepository.create({ userId, postId, isLike, isDislike: false });
     sendBack = postReactionRepository.getPostReaction(userId, postId);
+    sendNotificationToPostOwner(postId, userId);
   }
   return sendBack;
 };

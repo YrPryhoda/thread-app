@@ -103,7 +103,7 @@ class PostRepository extends BaseRepository {
         }
       }, {
         model: UserModel,
-        attributes: ['id', 'username', 'status'],
+        attributes: ['id', 'username', 'status', 'email'],
         include: {
           model: ImageModel,
           attributes: ['id', 'link']
