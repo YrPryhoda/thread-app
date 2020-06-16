@@ -17,6 +17,18 @@ export const getComment = async id => {
   return response.json();
 };
 
+export const sendMail = async (to, postLink) => {
+  const response = await callWebApi({
+    endpoint: '/api/posts/share-post',
+    type: 'POST',
+    request: {
+      to,
+      postLink
+    }
+  });
+  return response.json();
+};
+
 export const updateComment = async request => {
   const response = await callWebApi({
     endpoint: `/api/comments/edit/${request.id}`,

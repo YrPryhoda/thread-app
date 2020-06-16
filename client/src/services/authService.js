@@ -18,6 +18,23 @@ export const registration = async request => {
   return response.json();
 };
 
+export const editPassword = async () => {
+  const response = await callWebApi({
+    endpoint: '/api/auth/reset',
+    type: 'GET'
+  });
+  return response.json();
+};
+
+export const changePassword = async request => {
+  const response = await callWebApi({
+    endpoint: '/api/auth/reset-password',
+    type: 'PUT',
+    request
+  });
+  return response.json();
+};
+
 export const getCurrentUser = async () => {
   try {
     const response = await callWebApi({

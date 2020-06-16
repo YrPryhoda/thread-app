@@ -122,6 +122,8 @@ export const updatePostsComment = comment => async dispatch => {
   dispatch(editPostAction(null));
 };
 
+export const sendSharedPost = (email, link) => commentService.sendMail(email, link);
+
 export const toggleExpandedPost = postId => async dispatch => {
   const post = postId ? await postService.getPost(postId) : undefined;
   dispatch(setExpandedPostAction(post));
