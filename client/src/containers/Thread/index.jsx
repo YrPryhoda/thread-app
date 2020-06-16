@@ -15,7 +15,7 @@ import {
   defineEditedPost, deletePostById, deleteComment,
   loadPosts, loadMorePosts, toggleExpandedPost,
   addPost, sendEditedPost, dislikePost, reactPost,
-  getUsersWhoLikesPost
+  getUsersWhoLikesPost, sendSharedPost
 } from './actions';
 
 import styles from './styles.module.scss';
@@ -152,6 +152,8 @@ const Thread = ({
 
   const uploadImage = file => imageService.uploadImage(file);
 
+  const onSendShare = (email, link) => sendSharedPost(email, link);
+
   return (
     <div className={styles.threadContent}>
       <div className={styles.addPostForm}>
@@ -217,7 +219,13 @@ const Thread = ({
           />
         )
       }
-      {sharedPostId && <SharedPostLink postId={sharedPostId} close={() => setSharedPostId(undefined)} />}
+      {sharedPostId && (
+        <SharedPostLink
+          postId={sharedPostId}
+          close={() => setSharedPostId(undefined)}
+          onSendShare={onSendShare}
+        />
+      )}
       {
         modalToDelete.open
         && (

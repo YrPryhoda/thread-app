@@ -7,11 +7,12 @@ import {
   Image,
   Input,
   Icon,
-  Button
+  Button,
+  Segment
 } from 'semantic-ui-react';
 import * as imageService from 'src/services/imageService';
 import styles from 'src/components/AddPost/styles.module.scss';
-import { updatePersonalField } from './actions';
+import { updatePersonalField, resetPassword } from './actions';
 
 const Profile = ({
   user,
@@ -21,7 +22,8 @@ const Profile = ({
     status: user.status || '',
     username: user.username,
     usernameFieldProtect: true,
-    iconUsername: 'edit'
+    iconUsername: 'edit',
+    notification: false
   });
   const [image, setImage] = useState(undefined);
   const [isUploading, setIsUploading] = useState({
@@ -71,10 +73,26 @@ const Profile = ({
     await updateField({ imageId: image.imageId });
     setImage(undefined);
   };
+  const sendPasswordLink = async () => {
+    await resetPassword();
+    stateTemplate({ notification: true });
+    setTimeout(() => {
+      stateTemplate({ notification: false });
+    }, 8000);
+  };
 
   return (
     <Grid container textAlign="center" style={{ paddingTop: 30 }}>
       <Grid.Column>
+        {
+          data.notification && (
+            <Segment size="large" inverted color="teal">
+              Check
+              {` ${user.email} `}
+              mail box for link to change password
+            </Segment>
+          )
+        }
         <Image centered src={getUserImgLink(user.image)} size="medium" circular />
         <br />
         <br />
@@ -155,6 +173,18 @@ const Profile = ({
           onClick={e => changeField(e, { status: data.status })}
           icon="check"
         />
+        <br />
+        <br />
+        <Button
+          color="teal"
+          icon
+          labelPosition="left"
+          as="label"
+          onClick={sendPasswordLink}
+        >
+          <Icon name="mail" />
+          Reset password
+        </Button>
       </Grid.Column>
     </Grid>
   );

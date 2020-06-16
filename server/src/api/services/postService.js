@@ -32,7 +32,16 @@ export const editPostById = async (userId, newPost) => {
 async function sendNotificationToPostOwner(postId, userId) {
   const { user } = await postRepository.getPostById(postId);
   const { id, username } = await userRepository.getUserById(userId);
-  return user.id !== id ? sendMail(user.email, username, 'post') : null;
+  return user.id !== id ? sendMail(user.email, username, 'like') : null;
+}
+
+export async function sharePostByEmail(userId, body) {
+  const user = await userRepository.getUserById(userId);
+  return sendMail(body.to, {
+    username: user.username,
+    postLink: body.postLink
+  },
+  'sharePost');
 }
 
 export const setReaction = async (userId, { postId, isLike }) => {

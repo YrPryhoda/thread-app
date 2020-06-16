@@ -24,6 +24,14 @@ export const register = request => handleAuthResponse(authService.registration(r
 
 export const logout = () => setAuthData();
 
+export const resetPassword = async () => authService.editPassword();
+
+export const sendChangeProfileRequest = password => async (dispatch, getRootState) => {
+  const user = await authService.changePassword({ password });
+  setUser(user)(dispatch, getRootState);
+  return true;
+};
+
 export const loadCurrentUser = () => async (dispatch, getRootState) => {
   const user = await authService.getCurrentUser();
   setUser(user)(dispatch, getRootState);

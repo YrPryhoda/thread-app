@@ -19,6 +19,9 @@ router
       return res.send(post);
     })
     .catch(next))
+  .post('/share-post', (req, res, next) => postService.sharePostByEmail(req.user.id, req.body)
+    .then(post => res.send(post))
+    .catch(next))
   .put('/edit/:id', (req, res, next) => postService.editPostById(req.user.id, req.body)
     .then(post => res.send(post))
     .catch(next))

@@ -7,6 +7,7 @@ import LoginPage from 'src/containers/LoginPage';
 import RegistrationPage from 'src/containers/RegistrationPage';
 import Profile from 'src/containers/Profile';
 import Header from 'src/components/Header';
+import ResetPassword from 'src/containers/ResetPassword';
 import SharedPost from 'src/containers/SharedPost';
 import Spinner from 'src/components/Spinner';
 import NotFound from 'src/scenes/NotFound';
@@ -50,6 +51,7 @@ const Routing = ({
               <PrivateRoute exact path="/" component={Thread} />
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute path="/share/:postHash" component={SharedPost} />
+              <PrivateRoute exact path="/profile/:passwordToken" component={ResetPassword} />
               <Route path="*" exact component={NotFound} />
             </Switch>
           </main>
