@@ -5,11 +5,15 @@ import moment from 'moment';
 import { getUserImgLink } from 'src/helpers/imageHelper';
 
 import styles from './styles.module.scss';
+import style from '../Post/styles.module.scss';
 
 const Comment = ({
   comment: { id, body, createdAt, user },
   deletePost,
   editPost,
+  likeCount,
+  dislikeCount,
+  likeComment,
   userId
 }) => (
   <CommentUI className={styles.comment}>
@@ -21,7 +25,7 @@ const Comment = ({
       <CommentUI.Metadata>
         {moment(createdAt).fromNow()}
       </CommentUI.Metadata>
-      { user.status && (
+      {user.status && (
         <CommentUI.Content>
           <CommentUI.Metadata>
             {user.status}
@@ -31,6 +35,22 @@ const Comment = ({
       <CommentUI.Text>
         {body}
       </CommentUI.Text>
+      <Label
+        basic
+        size="small"
+        as="a"
+        className={style.toolbarBtn}
+        onClick={() => likeComment(id)}
+      >
+        <Icon name="thumbs up" />
+        <span>
+          {likeCount}
+        </span>
+      </Label>
+      <Label basic size="small" as="a" className={style.toolbarBtn}>
+        <Icon name="thumbs down" />
+        {dislikeCount}
+      </Label>
       {
         user.id === userId
         && (
@@ -64,7 +84,10 @@ Comment.propTypes = {
   comment: PropTypes.objectOf(PropTypes.any).isRequired,
   deletePost: PropTypes.func.isRequired,
   editPost: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired
+  likeComment: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
+  likeCount: PropTypes.bool.isRequired,
+  dislikeCount: PropTypes.bool.isRequired
 };
 
 export default Comment;

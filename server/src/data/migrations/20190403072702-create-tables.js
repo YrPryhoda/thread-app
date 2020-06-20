@@ -86,6 +86,27 @@ export default {
         createdAt: Sequelize.DATE,
         updatedAt: Sequelize.DATE
       }, { transaction }),
+      queryInterface.createTable('commentReactions', {
+        id: {
+          allowNull: false,
+          autoIncrement: false,
+          primaryKey: true,
+          type: Sequelize.UUID,
+          defaultValue: Sequelize.literal('gen_random_uuid()')
+        },
+        isLike: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: true
+        },
+        isDislike: {
+          allowNull: false,
+          type: Sequelize.BOOLEAN,
+          defaultValue: false
+        },
+        createdAt: Sequelize.DATE,
+        updatedAt: Sequelize.DATE
+      }, { transaction }),
       queryInterface.createTable('images', {
         id: {
           allowNull: false,
@@ -113,6 +134,7 @@ export default {
       queryInterface.dropTable('posts', { transaction }),
       queryInterface.dropTable('comments', { transaction }),
       queryInterface.dropTable('postReactions', { transaction }),
+      queryInterface.dropTable('commentReactions', { transaction }),
       queryInterface.dropTable('images', { transaction })
     ]))
 };

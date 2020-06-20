@@ -9,7 +9,8 @@ import {
   dislikePost,
   toggleExpandedPost,
   addComment,
-  updatePostsComment
+  updatePostsComment,
+  reactComment
 } from 'src/containers/Thread/actions';
 import Post from 'src/components/Post';
 import Comment from 'src/components/Comment';
@@ -31,7 +32,8 @@ const ExpandedPost = ({
   deletePost,
   updatePostsComment: updateComment,
   onHover,
-  onMouseHover
+  onMouseHover,
+  reactComment: likeComment
 }) => {
   const [editedPost, setEditedPost] = useState(post);
   useEffect(() => {
@@ -78,6 +80,7 @@ const ExpandedPost = ({
                     editPost={editPost}
                     deletePost={deletePost}
                     userId={userId}
+                    likeComment={likeComment}
                   />
                 )))}
               {
@@ -96,6 +99,7 @@ ExpandedPost.propTypes = {
   onMouseHover: PropTypes.objectOf(PropTypes.any).isRequired,
   toggleExpandedPost: PropTypes.func.isRequired,
   reactPost: PropTypes.func.isRequired,
+  reactComment: PropTypes.func.isRequired,
   dislikePost: PropTypes.func.isRequired,
   addComment: PropTypes.func.isRequired,
   sharePost: PropTypes.func.isRequired,
@@ -124,7 +128,8 @@ const actions = {
   dislikePost,
   toggleExpandedPost,
   addComment,
-  updatePostsComment
+  updatePostsComment,
+  reactComment
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(actions, dispatch);
