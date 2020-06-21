@@ -79,6 +79,10 @@ const Comment = ({
     </CommentUI.Content>
   </CommentUI>
 );
+Comment.defaultProps = {
+  likeCount: null,
+  dislikeCount: null
+};
 
 Comment.propTypes = {
   comment: PropTypes.objectOf(PropTypes.any).isRequired,
@@ -86,8 +90,8 @@ Comment.propTypes = {
   editPost: PropTypes.func.isRequired,
   likeComment: PropTypes.func.isRequired,
   userId: PropTypes.string.isRequired,
-  likeCount: PropTypes.bool.isRequired,
-  dislikeCount: PropTypes.bool.isRequired
+  likeCount: PropTypes.string,
+  dislikeCount: PropTypes.string
 };
 
 export default Comment;

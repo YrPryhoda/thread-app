@@ -1,4 +1,4 @@
-import { CommentModel, UserModel, ImageModel, CommentReactionModel } from '../models/index';
+import { CommentModel, UserModel, ImageModel } from '../models/index';
 import BaseRepository from './baseRepository';
 
 class CommentRepository extends BaseRepository {
@@ -17,9 +17,6 @@ class CommentRepository extends BaseRepository {
           model: ImageModel,
           attributes: ['id', 'link']
         }
-      }, {
-        model: CommentReactionModel,
-        attributes: ['id', 'commentId', 'userId']
       }]
     });
   }
