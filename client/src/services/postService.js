@@ -18,6 +18,15 @@ export const addPost = async request => {
   return response.json();
 };
 
+export const editPost = async request => {
+  const response = await callWebApi({
+    endpoint: `/api/posts/edit/${request.id}`,
+    type: 'PUT',
+    request
+  });
+  return response.json();
+};
+
 export const getPost = async id => {
   const response = await callWebApi({
     endpoint: `/api/posts/${id}`,
@@ -26,7 +35,15 @@ export const getPost = async id => {
   return response.json();
 };
 
-export const likePost = async postId => {
+export const deletePost = async id => {
+  const response = await callWebApi({
+    endpoint: `/api/posts/delete/${id}`,
+    type: 'DELETE'
+  });
+  return response.json();
+};
+
+export const reactPost = async postId => {
   const response = await callWebApi({
     endpoint: '/api/posts/react',
     type: 'PUT',
@@ -34,6 +51,26 @@ export const likePost = async postId => {
       postId,
       isLike: true
     }
+  });
+  return response.json();
+};
+
+export const reactPostNegative = async postId => {
+  const response = await callWebApi({
+    endpoint: '/api/posts/react-negative',
+    type: 'PUT',
+    request: {
+      postId,
+      isDislike: true
+    }
+  });
+  return response.json();
+};
+
+export const getLikedUsers = async postId => {
+  const response = await callWebApi({
+    endpoint: `/api/posts/likers/${postId}`,
+    type: 'GET'
   });
   return response.json();
 };

@@ -3,3 +3,7 @@
     overflow: auto;
   }
 }
+:global(.ui.basic.label).right {
+  float: right;
+  border: none;
+}

@@ -17,6 +17,17 @@ router
     .catch(next))
   .get('/user', jwtMiddleware, (req, res, next) => userService.getUserById(req.user.id)
     .then(data => res.send(data))
+    .catch(next))
+  .get('/reset', jwtMiddleware, (req, res, next) => userService.sendEmail(req.user.id)
+    .then(data => res.send(data))
+    .catch(next))
+  .put('/reset-password', jwtMiddleware, (req, res, next) => userService
+    .setNewPassword(req.user.id, req.body)
+    .then(data => res.send(data))
+    .catch(next))
+  .post('/user', jwtMiddleware, (req, res, next) => userService
+    .updateUserStatusById(req.user.id, req.body)
+    .then(data => res.send(data))
     .catch(next));
 
 export default router;

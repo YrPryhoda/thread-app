@@ -9,8 +9,17 @@ export default (orm, DataTypes) => {
       type: DataTypes.STRING,
       unique: true
     },
+    status: {
+      allowNull: true,
+      type: DataTypes.STRING
+    },
     password: {
       allowNull: false,
+      type: DataTypes.STRING,
+      unique: true
+    },
+    passwordToken: {
+      allowNull: true,
       type: DataTypes.STRING,
       unique: true
     },

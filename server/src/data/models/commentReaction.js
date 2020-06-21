@@ -1,5 +1,5 @@
 export default (orm, DataTypes) => {
-  const PostReaction = orm.define('postReaction', {
+  const CommentReaction = orm.define('commentReaction', {
     isLike: {
       allowNull: false,
       type: DataTypes.BOOLEAN,
@@ -14,5 +14,5 @@ export default (orm, DataTypes) => {
     updatedAt: DataTypes.DATE
   }, {});
 
-  return PostReaction;
+  return CommentReaction;
 };

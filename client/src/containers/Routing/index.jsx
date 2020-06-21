@@ -7,6 +7,7 @@ import LoginPage from 'src/containers/LoginPage';
 import RegistrationPage from 'src/containers/RegistrationPage';
 import Profile from 'src/containers/Profile';
 import Header from 'src/components/Header';
+import ResetPassword from 'src/containers/ResetPassword';
 import SharedPost from 'src/containers/SharedPost';
 import Spinner from 'src/components/Spinner';
 import NotFound from 'src/scenes/NotFound';
@@ -16,9 +17,11 @@ import Notifications from 'src/components/Notifications';
 import { loadCurrentUser, logout } from 'src/containers/Profile/actions';
 import { applyPost } from 'src/containers/Thread/actions';
 import PropTypes from 'prop-types';
+import { updatePersonalField } from '../Profile/actions';
 
 const Routing = ({
   user,
+  updatePersonalField: updateField,
   isAuthorized,
   applyPost: newPost,
   logout: signOut,
@@ -38,7 +41,7 @@ const Routing = ({
         <div className="fill">
           {isAuthorized && (
             <header>
-              <Header user={user} logout={signOut} />
+              <Header user={user} logout={signOut} updatePersonalField={updateField} />
             </header>
           )}
           <main className="fill">
@@ -48,6 +51,7 @@ const Routing = ({
               <PrivateRoute exact path="/" component={Thread} />
               <PrivateRoute exact path="/profile" component={Profile} />
               <PrivateRoute path="/share/:postHash" component={SharedPost} />
+              <PrivateRoute exact path="/profile/:passwordToken" component={ResetPassword} />
               <Route path="*" exact component={NotFound} />
             </Switch>
           </main>
@@ -63,7 +67,8 @@ Routing.propTypes = {
   applyPost: PropTypes.func.isRequired,
   user: PropTypes.objectOf(PropTypes.any),
   isLoading: PropTypes.bool,
-  loadCurrentUser: PropTypes.func.isRequired
+  loadCurrentUser: PropTypes.func.isRequired,
+  updatePersonalField: PropTypes.func.isRequired
 };
 
 Routing.defaultProps = {
@@ -72,7 +77,12 @@ Routing.defaultProps = {
   isLoading: true
 };
 
-const actions = { loadCurrentUser, logout, applyPost };
+const actions = {
+  loadCurrentUser,
+  logout,
+  applyPost,
+  updatePersonalField
+};
 
 const mapStateToProps = ({ profile }) => ({
   isAuthorized: profile.isAuthorized,

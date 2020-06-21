@@ -1,4 +1,4 @@
-import { PostReactionModel, PostModel } from '../models/index';
+import { PostReactionModel, PostModel, UserModel } from '../models/index';
 import BaseRepository from './baseRepository';
 
 class PostReactionRepository extends BaseRepository {
@@ -12,6 +12,17 @@ class PostReactionRepository extends BaseRepository {
       include: [{
         model: PostModel,
         attributes: ['id', 'userId']
+      }]
+    });
+  }
+
+  getLikers(postId) {
+    return this.model.findAll({
+      where: { postId, isLike: true },
+      attributes: ['id'],
+      include: [{
+        model: UserModel,
+        attributes: ['id', 'username']
       }]
     });
   }

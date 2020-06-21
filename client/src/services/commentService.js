@@ -16,3 +16,44 @@ export const getComment = async id => {
   });
   return response.json();
 };
+
+export const sendMail = async (to, postLink) => {
+  const response = await callWebApi({
+    endpoint: '/api/posts/share-post',
+    type: 'POST',
+    request: {
+      to,
+      postLink
+    }
+  });
+  return response.json();
+};
+
+export const updateComment = async request => {
+  const response = await callWebApi({
+    endpoint: `/api/comments/edit/${request.id}`,
+    type: 'PUT',
+    request
+  });
+  return response.json();
+};
+
+export const deleteComment = async id => {
+  const response = await callWebApi({
+    endpoint: `/api/comments/delete/${id}`,
+    type: 'DELETE'
+  });
+  return response.json();
+};
+
+export const reactComment = async commentId => {
+  const response = await callWebApi({
+    endpoint: '/api/comments/react',
+    type: 'PUT',
+    request: {
+      commentId,
+      isLike: true
+    }
+  });
+  return response.json();
+};
