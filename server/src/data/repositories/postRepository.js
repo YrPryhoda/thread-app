@@ -1,11 +1,17 @@
 import sequelize from '../db/connection';
-import { PostModel, CommentModel, UserModel, ImageModel, PostReactionModel } from '../models/index';
+import {
+  PostModel,
+  CommentModel,
+  UserModel,
+  ImageModel,
+  PostReactionModel
+} from '../models/index';
 import BaseRepository from './baseRepository';
 
 const { Op } = require('sequelize');
 
-const likeCase = bool => `CASE WHEN "postReactions"."isLike" = ${bool} THEN 1 ELSE 0 END`;
-const dislikeCase = bool => `CASE WHEN "postReactions"."isDislike" = ${bool} THEN 1 ELSE 0 END`;
+const likeCase = (bool, model) => `CASE WHEN "${model}"."isLike" = ${bool} THEN 1 ELSE 0 END`;
+const dislikeCase = (bool, model) => `CASE WHEN "${model}"."isDislike" = ${bool} THEN 1 ELSE 0 END`;
 
 class PostRepository extends BaseRepository {
   async getPosts(filter) {
@@ -35,8 +41,8 @@ class PostRepository extends BaseRepository {
                         (SELECT COUNT(*)
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
-          [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likeCount'],
-          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true))), 'dislikeCount']
+          [sequelize.fn('SUM', sequelize.literal(likeCase(true, 'postReactions'))), 'likeCount'],
+          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true, 'postReactions'))), 'dislikeCount']
         ]
       },
       include: [{
@@ -88,20 +94,24 @@ class PostRepository extends BaseRepository {
                         (SELECT COUNT(*)
                         FROM "comments" as "comment"
                         WHERE "post"."id" = "comment"."postId")`), 'commentCount'],
-          [sequelize.fn('SUM', sequelize.literal(likeCase(true))), 'likeCount'],
-          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true))), 'dislikeCount']
+          [sequelize.fn('SUM', sequelize.literal(likeCase(true, 'postReactions'))), 'likeCount'],
+          [sequelize.fn('SUM', sequelize.literal(dislikeCase(true, 'postReactions'))), 'dislikeCount']
         ]
       },
       include: [{
         model: CommentModel,
-        include: {
+        include: [{
           model: UserModel,
-          attributes: ['id', 'username', 'status'],
+          attributes: [
+            'id',
+            'username',
+            'status'
+          ],
           include: {
             model: ImageModel,
             attributes: ['id', 'link']
           }
-        }
+        }]
       }, {
         model: UserModel,
         attributes: ['id', 'username', 'status', 'email'],

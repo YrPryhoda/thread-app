@@ -45,3 +45,15 @@ export const deleteComment = async id => {
   });
   return response.json();
 };
+
+export const reactComment = async commentId => {
+  const response = await callWebApi({
+    endpoint: '/api/comments/react',
+    type: 'PUT',
+    request: {
+      commentId,
+      isLike: true
+    }
+  });
+  return response.json();
+};
