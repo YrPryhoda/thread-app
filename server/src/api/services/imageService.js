@@ -3,6 +3,7 @@ import { imgurId } from '../../config/imgurConfig';
 import imageRepository from '../../data/repositories/imageRepository';
 
 const uploadToImgur = async file => {
+  console.log(file.buffer).toString('base64');
   try {
     const { data: { data } } = await axios.post(
       'https://api.imgur.com/3/upload',

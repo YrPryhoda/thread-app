@@ -11,7 +11,7 @@ const AddComment = ({
   const [body, setBody] = useState('');
   useEffect(() => {
     if (comment.body) setBody(comment.body);
-  }, []);
+  }, [comment.body]);
   const handleAddComment = async () => {
     if (!body) {
       return;

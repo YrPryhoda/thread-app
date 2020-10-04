@@ -8,11 +8,19 @@ import moment from 'moment';
 import styles from './styles.module.scss';
 
 const Post = ({
-  post, reactPost, dislikePost,
-  toggleExpandedPost, sharePost,
-  userId, uploadImage, sendEditedPost,
-  editPost, postToEdit, deletePost,
-  onHover, onMouseHover
+  post,
+  reactPost,
+  dislikePost,
+  toggleExpandedPost,
+  sharePost,
+  userId,
+  uploadImage,
+  sendEditedPost,
+  editPost,
+  postToEdit,
+  deletePost,
+  onHover,
+  onMouseHover
 }) => {
   const {
     id,
@@ -27,11 +35,13 @@ const Post = ({
   } = post;
   const date = moment(createdAt).fromNow();
   return postToEdit === id ? (
-    <AddPost uploadImage={uploadImage} updatePost={sendEditedPost} post={post} />
+    <AddPost
+      uploadImage={uploadImage}
+      updatePost={sendEditedPost}
+      post={post}
+    />
   ) : (
-    <Card
-      style={{ width: '100%' }}
-    >
+    <Card style={{ width: '100%' }}>
       {image && <Image src={image.link} wrapped ui={false} />}
       <Card.Content>
         <Card.Meta>
@@ -43,12 +53,12 @@ const Post = ({
             {date}
           </span>
         </Card.Meta>
-        <Card.Description>
-          {body}
-        </Card.Description>
+        <Card.Description>{body}</Card.Description>
       </Card.Content>
       <Card.Content extra>
-        {onMouseHover.show && onMouseHover.postId === id && (<LikesList users={likers} />)}
+        {onMouseHover.show && onMouseHover.postId === id && (
+          <LikesList users={likers} />
+        )}
         <Label
           basic
           size="small"
@@ -66,42 +76,57 @@ const Post = ({
             {likeCount}
           </span>
         </Label>
-        <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => dislikePost(id)}>
+        <Label
+          basic
+          size="small"
+          as="a"
+          className={styles.toolbarBtn}
+          onClick={() => dislikePost(id)}
+        >
           <Icon name="thumbs down" />
           {dislikeCount}
         </Label>
-        <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => toggleExpandedPost(id)}>
+        <Label
+          basic
+          size="small"
+          as="a"
+          className={styles.toolbarBtn}
+          onClick={() => toggleExpandedPost(id)}
+        >
           <Icon name="comment" />
           {commentCount}
         </Label>
-        <Label basic size="small" as="a" className={styles.toolbarBtn} onClick={() => sharePost(id)}>
+        <Label
+          basic
+          size="small"
+          as="a"
+          className={styles.toolbarBtn}
+          onClick={() => sharePost(id)}
+        >
           <Icon name="share alternate" />
         </Label>
-        {
-          user.id === userId
-          && (
-            <>
-              <Label
-                basic
-                size="large"
-                as="a"
-                className={styles.right}
-                onClick={() => deletePost(id)}
-              >
-                <Icon name="eraser" />
-              </Label>
-              <Label
-                basic
-                size="large"
-                as="a"
-                className={styles.right}
-                onClick={() => editPost(id)}
-              >
-                <Icon name="edit" />
-              </Label>
-            </>
-          )
-        }
+        {user.id === userId && (
+          <>
+            <Label
+              basic
+              size="large"
+              as="a"
+              className={styles.right}
+              onClick={() => deletePost(id)}
+            >
+              <Icon name="eraser" />
+            </Label>
+            <Label
+              basic
+              size="large"
+              as="a"
+              className={styles.right}
+              onClick={() => editPost(id)}
+            >
+              <Icon name="edit" />
+            </Label>
+          </>
+        )}
       </Card.Content>
     </Card>
   );

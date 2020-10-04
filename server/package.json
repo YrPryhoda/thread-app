@@ -9,7 +9,7 @@
   "main": "server.js",
   "scripts": {
     "start": "nodemon src/server.js --exec \"npm run linter && babel-node\"",
-    "linter": "eslint src",
+    "linter": "eslint src --fix",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

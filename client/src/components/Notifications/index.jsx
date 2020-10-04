@@ -28,7 +28,7 @@ const Notifications = ({ user, applyPost }) => {
     return () => {
       socket.close();
     };
-  }, [user?.id]);
+  }, [applyPost, socket, user]);
 
   return <NotificationContainer />;
 };
